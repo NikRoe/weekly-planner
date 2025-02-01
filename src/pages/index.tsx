@@ -3,6 +3,7 @@ import { TodoFromForm, TodoList } from "../../types/todo";
 import { nanoid } from "nanoid";
 import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
+import styles from "@/styles/Home.module.css";
 
 const initialTodos: TodoList = [
   {
@@ -53,12 +54,7 @@ export default function Home() {
   return (
     <>
       <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(8, minmax(10px, 1fr))",
-        }}
-      >
+      <div className={styles.columnWrapper}>
         {columnNames.map((column, index) => {
           const filteredTodos = todos.filter((todo) => todo.column === column);
           return <Column key={index} name={column} todos={filteredTodos} />;
