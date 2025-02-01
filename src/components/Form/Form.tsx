@@ -9,10 +9,12 @@ export default function Form({
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.target as HTMLFormElement);
-    const data = Object.fromEntries(formData);
+    const form = event.currentTarget;
 
-    onAddTodo(data as TodoFromForm);
+    const formData = new FormData(form as HTMLFormElement);
+    const data = Object.fromEntries(formData) as TodoFromForm;
+
+    onAddTodo(data);
   }
 
   return (
@@ -34,7 +36,11 @@ export default function Form({
       </label>
       <label htmlFor="notes">weitere Notizen</label>
       <textarea rows={5} name="notes" id="notes"></textarea>
-      <button type="submit" className={styles.button}>
+      <button
+        type="submit"
+        className={styles.button}
+        aria-label="Neues Todo hinzufügen"
+      >
         Add Todo
       </button>
     </form>

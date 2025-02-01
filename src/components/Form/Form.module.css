@@ -9,4 +9,5 @@
 .button {
   align-self: center;
   padding: 1rem 0.75rem;
+  cursor: pointer;
 }
