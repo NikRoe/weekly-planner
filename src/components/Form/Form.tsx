@@ -1,4 +1,5 @@
-import { TodoFromForm } from "../../types/todo";
+import { TodoFromForm } from "../../../types/todo";
+import styles from "./Form.module.css";
 
 export default function Form({
   onAddTodo,
@@ -15,16 +16,7 @@ export default function Form({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        margin: "0 auto",
-        maxWidth: "400px",
-        gap: "1rem",
-      }}
-    >
+    <form onSubmit={handleSubmit} className={styles.form}>
       <label htmlFor="title">Titel*</label>
       <input name="title" id="title" type="text" required aria-required />
       <label>
@@ -42,10 +34,7 @@ export default function Form({
       </label>
       <label htmlFor="notes">weitere Notizen</label>
       <textarea rows={5} name="notes" id="notes"></textarea>
-      <button
-        type="submit"
-        style={{ alignSelf: "center", padding: "1rem 0.75rem" }}
-      >
+      <button type="submit" className={styles.button}>
         Add Todo
       </button>
     </form>

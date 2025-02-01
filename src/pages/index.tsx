@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TodoFromForm, TodoList } from "../../types/todo";
 import { nanoid } from "nanoid";
-import Form from "@/components/Form";
+import Form from "@/components/Form/Form";
 
 const initialTodos: TodoList = [
   {
