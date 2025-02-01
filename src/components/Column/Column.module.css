@@ -1,0 +1,11 @@
+.list {
+  display: flex;
+  list-style-type: none;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  padding: 1rem;
+  border: 2px solid var(--foreground);
+}

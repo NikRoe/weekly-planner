@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TodoFromForm, TodoList } from "../../types/todo";
 import { nanoid } from "nanoid";
 import Form from "@/components/Form/Form";
+import Column from "@/components/Column/Column";
 
 const initialTodos: TodoList = [
   {
@@ -60,31 +61,7 @@ export default function Home() {
       >
         {columnNames.map((column, index) => {
           const filteredTodos = todos.filter((todo) => todo.column === column);
-          return (
-            <ul
-              key={index}
-              style={{
-                display: "flex",
-                listStyle: "none",
-                flexDirection: "column",
-                width: "10vw",
-                gap: "1rem",
-              }}
-            >
-              <h2>{column}</h2>
-              {filteredTodos.map((todo) => (
-                <li
-                  key={todo.id}
-                  style={{
-                    padding: "1rem",
-                    border: "2px solid var(--foreground)",
-                  }}
-                >
-                  {todo.title}
-                </li>
-              ))}
-            </ul>
-          );
+          return <Column key={index} name={column} todos={filteredTodos} />;
         })}
       </div>
       <Form onAddTodo={handleAddTodo} />
