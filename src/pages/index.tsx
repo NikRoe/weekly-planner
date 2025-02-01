@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TodoFromForm, TodoList } from "../../types/todo";
+import { Todo, TodoFromForm, TodoList } from "../../types/todo";
 import { nanoid } from "nanoid";
 import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
@@ -57,13 +57,26 @@ export default function Home() {
     setIsOpen(!isOpen);
   }
 
+  function handleEditTodo(updatedTodo: Todo) {
+    setTodos(
+      todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+    );
+  }
+
   return (
     <>
       <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
       <div className={styles.columnWrapper}>
         {columnNames.map((column, index) => {
           const filteredTodos = todos.filter((todo) => todo.column === column);
-          return <Column key={index} name={column} todos={filteredTodos} />;
+          return (
+            <Column
+              key={index}
+              name={column}
+              todos={filteredTodos}
+              onEditTodo={handleEditTodo}
+            />
+          );
         })}
       </div>
 
