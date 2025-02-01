@@ -1,7 +1,14 @@
 .button {
   position: absolute;
   right: 10px;
+  font-size: xx-large;
   cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.button:hover {
+  color: var(--hover-color);
 }
 
 .innerWrapper {

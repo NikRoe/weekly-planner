@@ -66,15 +66,17 @@ export default function Home() {
           return <Column key={index} name={column} todos={filteredTodos} />;
         })}
       </div>
-      {!isOpen && (
-        <button
-          type="button"
-          aria-label="open form to add todo"
-          onClick={handleToggleModal}
-        >
-          +
-        </button>
-      )}
+
+      <button
+        type="button"
+        aria-label="open form to add todo"
+        onClick={handleToggleModal}
+        disabled={isOpen}
+        className={styles.button}
+      >
+        +
+      </button>
+
       {isOpen && (
         <Modal onClose={handleToggleModal}>
           <Form

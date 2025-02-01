@@ -6,3 +6,16 @@
   min-height: 75vh;
   overflow-x: scroll;
 }
+
+.button {
+  position: relative;
+  left: 75px;
+  font-size: xxx-large;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.button:hover {
+  color: var(--hover-color);
+}
