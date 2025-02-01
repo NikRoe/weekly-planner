@@ -47,7 +47,8 @@ export default function Column({ name, todos, onEditTodo }: ColumnProps) {
                 event.stopPropagation();
                 handleUpdateStatus(todo);
               }}
-              className={`${styles.button} ${styles.status}  ${
+              type="button"
+              className={`${styles.button}   ${
                 todo.status === "Done" ? styles.done : ""
               }`}
             ></button>
