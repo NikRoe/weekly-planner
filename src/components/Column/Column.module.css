@@ -13,9 +13,23 @@
   border: 2px solid var(--border-color);
   border-radius: 5px;
   background-color: var(--card);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .title {
   text-align: center;
   border-bottom: 2px dotted var(--border-color);
+}
+
+.status {
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+  background: orange;
+}
+
+.done {
+  background: green;
 }

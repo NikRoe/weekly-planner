@@ -12,6 +12,11 @@ export default function Column({ name, todos }: ColumnProps) {
       <h2 className={styles.title}>{name}</h2>
       {todos.map((todo) => (
         <li key={todo.id} className={styles.card}>
+          <span
+            className={`${styles.status} ${
+              todo.status === "Done" ? styles.done : ""
+            }`}
+          ></span>
           {todo.title}
         </li>
       ))}
