@@ -14,6 +14,7 @@
   border-radius: 5px;
   background-color: var(--card);
   display: flex;
+  justify-content: space-between;
   gap: 1rem;
   align-items: center;
   cursor: pointer;
@@ -35,4 +36,15 @@
 
 .done {
   background: green;
+}
+
+.deleteButton {
+  cursor: pointer;
+  font-size: large;
+  background: none;
+  border: none;
+}
+
+.deleteButton:hover {
+  color: var(--hover-color);
 }

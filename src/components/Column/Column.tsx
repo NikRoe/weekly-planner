@@ -8,9 +8,15 @@ interface ColumnProps {
   name: string;
   todos: TodoList;
   onEditTodo: (updatedTodo: Todo) => void;
+  onDeleteTodo: (idToDelete: string) => void;
 }
 
-export default function Column({ name, todos, onEditTodo }: ColumnProps) {
+export default function Column({
+  name,
+  todos,
+  onEditTodo,
+  onDeleteTodo,
+}: ColumnProps) {
   const [todoToEdit, setTodoToEdit] = useState<Todo>();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,6 +59,17 @@ export default function Column({ name, todos, onEditTodo }: ColumnProps) {
               }`}
             ></button>
             {todo.title}
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDeleteTodo(todo.id);
+              }}
+              aria-label="Eintrag löschen"
+              className={styles.deleteButton}
+            >
+              X
+            </button>
           </li>
         ))}
       </ul>

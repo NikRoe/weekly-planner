@@ -63,6 +63,10 @@ export default function Home() {
     );
   }
 
+  function handleDeleteTodo(idToDelete: string) {
+    setTodos(todos.filter((todo) => todo.id !== idToDelete));
+  }
+
   return (
     <>
       <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
@@ -75,6 +79,7 @@ export default function Home() {
               name={column}
               todos={filteredTodos}
               onEditTodo={handleEditTodo}
+              onDeleteTodo={handleDeleteTodo}
             />
           );
         })}
