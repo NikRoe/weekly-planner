@@ -22,6 +22,13 @@ export default function Column({ name, todos, onEditTodo }: ColumnProps) {
     onEditTodo({ ...(todoToEdit as Todo), ...updatedTodo });
   }
 
+  function handleUpdateStatus(todoToUpdate: Todo) {
+    onEditTodo({
+      ...todoToUpdate,
+      status: todoToUpdate.status === "Done" ? "Open" : "Done",
+    });
+  }
+
   return (
     <>
       <ul className={styles.list}>
@@ -35,11 +42,15 @@ export default function Column({ name, todos, onEditTodo }: ColumnProps) {
               setTodoToEdit(todo);
             }}
           >
-            <span
-              className={`${styles.status} ${
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                handleUpdateStatus(todo);
+              }}
+              className={`${styles.button} ${styles.status}  ${
                 todo.status === "Done" ? styles.done : ""
               }`}
-            ></span>
+            ></button>
             {todo.title}
           </li>
         ))}

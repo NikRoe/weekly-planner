@@ -23,6 +23,12 @@
   border-bottom: 2px dotted var(--border-color);
 }
 
+.button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
 .status {
   border-radius: 50%;
   height: 16px;
