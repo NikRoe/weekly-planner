@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
 import styles from "@/styles/Home.module.css";
+import Modal from "@/components/Modal/Modal";
 
 const initialTodos: TodoList = [
   {
@@ -45,10 +46,15 @@ const columnNames = [
 
 export default function Home() {
   const [todos, setTodos] = useState<TodoList>(initialTodos);
+  const [isOpen, setIsOpen] = useState(false);
 
   function handleAddTodo(newTodo: TodoFromForm) {
     const todo = { ...newTodo, status: "Open", id: nanoid() };
     setTodos([...todos, todo]);
+  }
+
+  function handleToggleModal() {
+    setIsOpen(!isOpen);
   }
 
   return (
@@ -60,7 +66,25 @@ export default function Home() {
           return <Column key={index} name={column} todos={filteredTodos} />;
         })}
       </div>
-      <Form onAddTodo={handleAddTodo} />
+      {!isOpen && (
+        <button
+          type="button"
+          aria-label="open form to add todo"
+          onClick={handleToggleModal}
+        >
+          +
+        </button>
+      )}
+      {isOpen && (
+        <Modal onClose={handleToggleModal}>
+          <Form
+            onAddTodo={(newTodo) => {
+              handleAddTodo(newTodo);
+              handleToggleModal();
+            }}
+          />
+        </Modal>
+      )}
     </>
   );
 }

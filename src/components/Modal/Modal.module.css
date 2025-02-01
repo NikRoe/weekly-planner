@@ -1,0 +1,20 @@
+.button {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+.innerWrapper {
+  position: relative;
+  top: 25vh;
+  transform: translate(calc(50vw - 50%));
+  max-width: 400px;
+}
+
+.outerWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  backdrop-filter: blur(10px);
+}
