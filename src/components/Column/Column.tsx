@@ -9,7 +9,7 @@ interface ColumnProps {
 export default function Column({ name, todos }: ColumnProps) {
   return (
     <ul className={styles.list}>
-      <h2>{name}</h2>
+      <h2 className={styles.title}>{name}</h2>
       {todos.map((todo) => (
         <li key={todo.id} className={styles.card}>
           {todo.title}
