@@ -5,8 +5,7 @@ import Modal from "../Modal/Modal";
 import Form from "../Form/Form";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import SortableItem from "../SortableItem/SortableItem";
 
 interface ColumnProps {
   name: string;
@@ -100,36 +99,5 @@ export default function Column({
         </Modal>
       )}
     </>
-  );
-}
-
-function SortableItem({
-  todo,
-  children,
-  onClick,
-}: {
-  todo: Todo;
-  children: JSX.Element;
-  onClick: () => void;
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: todo.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  return (
-    <li
-      onClick={onClick}
-      className={styles.card}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
-      {children}
-    </li>
   );
 }
