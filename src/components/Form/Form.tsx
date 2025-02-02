@@ -49,6 +49,7 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         required
         {...register("title")}
         defaultValue={defaultValue?.title}
+        autoFocus
       />
       {errors.title && <p className={styles.error}>{errors.title.message}</p>}
       <label>
