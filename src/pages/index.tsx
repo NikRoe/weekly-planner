@@ -19,6 +19,7 @@ import {
   handleEditTodo,
   handleDragEnd,
 } from "@/services/todos";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 export default function Home() {
   const { data: todos, isLoading, error } = useSWR<TodoList>("/api/todos");
@@ -37,7 +38,7 @@ export default function Home() {
     setIsOpen(!isOpen);
   }
 
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
   if (!todos) return;
 
