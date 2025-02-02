@@ -1,22 +1,26 @@
 import { useState } from "react";
-import { Todo, TodoFromForm, TodoList } from "../../types/todo";
-import { nanoid } from "nanoid";
 import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
 import styles from "@/styles/Home.module.css";
 import Modal from "@/components/Modal/Modal";
 import {
   DndContext,
-  DragEndEvent,
   closestCorners,
   useSensor,
   useSensors,
   PointerSensor,
 } from "@dnd-kit/core";
-import { initialTodos, columnNames } from "@/utils/todos";
+import { columnNames } from "@/utils/todos";
+import { useTodos } from "@/hooks/useTodos";
 
 export default function Home() {
-  const [todos, setTodos] = useState<TodoList>(initialTodos);
+  const {
+    todos,
+    handleEditTodo,
+    handleAddTodo,
+    handleDeleteTodo,
+    handleDragEnd,
+  } = useTodos();
   const [isOpen, setIsOpen] = useState(false);
 
   const pointerSensor = useSensor(PointerSensor, {
@@ -28,46 +32,8 @@ export default function Home() {
 
   const sensors = useSensors(pointerSensor);
 
-  function handleAddTodo(newTodo: TodoFromForm) {
-    const todo = { ...newTodo, status: "Open", id: nanoid() };
-    setTodos([...todos, todo]);
-  }
-
   function handleToggleModal() {
     setIsOpen(!isOpen);
-  }
-
-  function handleEditTodo(updatedTodo: Todo) {
-    setTodos(
-      todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
-    );
-  }
-
-  function handleDeleteTodo(idToDelete: string) {
-    setTodos(todos.filter((todo) => todo.id !== idToDelete));
-  }
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { over, active, collisions } = event;
-
-    if (!over) return;
-
-    const filteredCollisions = collisions?.filter((collision) =>
-      columnNames.some((name) => name === collision.id)
-    );
-
-    if (!filteredCollisions) return;
-
-    const { id: activeId } = active;
-
-    // @ts-ignore
-    setTodos((prevTodos: TodoList) => {
-      return prevTodos.map((todo) =>
-        todo.id === activeId
-          ? { ...todo, column: filteredCollisions[0].id }
-          : todo
-      );
-    });
   }
 
   return (
