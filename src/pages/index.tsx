@@ -11,16 +11,17 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
-import { useTodos } from "@/hooks/useTodos";
+import useSWR from "swr";
+import { TodoList } from "../../types/todo";
+import {
+  handleAddTodo,
+  handleDeleteTodo,
+  handleEditTodo,
+  handleDragEnd,
+} from "@/services/todos";
 
 export default function Home() {
-  const {
-    todos,
-    handleEditTodo,
-    handleAddTodo,
-    handleDeleteTodo,
-    handleDragEnd,
-  } = useTodos();
+  const { data: todos, isLoading, error } = useSWR<TodoList>("/api/todos");
   const [isOpen, setIsOpen] = useState(false);
 
   const pointerSensor = useSensor(PointerSensor, {
@@ -35,6 +36,10 @@ export default function Home() {
   function handleToggleModal() {
     setIsOpen(!isOpen);
   }
+
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>An Error Occurred</div>;
+  if (!todos) return;
 
   return (
     <>
