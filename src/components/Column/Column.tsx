@@ -90,8 +90,8 @@ export default function Column({
       {isOpen && (
         <Modal onClose={handleToggleModal}>
           <Form
-            onAddTodo={(newTodo) => {
-              handleEditTodo(newTodo);
+            onAddTodo={(updatedTodo) => {
+              handleEditTodo(updatedTodo);
               handleToggleModal();
             }}
             defaultValue={todoToEdit}
