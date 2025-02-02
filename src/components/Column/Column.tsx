@@ -66,6 +66,9 @@ export default function Column({
                   className={`${styles.button}   ${
                     todo.status === "Done" ? styles.done : ""
                   }`}
+                  aria-label={`Mark as ${
+                    todo.status === "Done" ? "open" : "done"
+                  }`}
                 ></button>
                 {todo.title}
                 <button
