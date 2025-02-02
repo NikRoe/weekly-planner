@@ -1,10 +1,14 @@
 .list {
   display: flex;
   list-style-type: none;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: 1rem;
   border: 1px solid var(--border-color);
   padding: 0.25rem;
+  height: 75vh;
+  overflow-y: scroll;
   border-radius: 5px;
 }
 
@@ -14,10 +18,11 @@
   border-radius: 5px;
   background-color: var(--card);
   display: grid;
-  grid-template-columns: 25px 100px 25px;
+  grid-template-columns: 25px 1fr;
   justify-content: space-between;
   position: relative;
   height: 100px;
+  width: 100%;
   align-items: center;
   cursor: pointer;
 }
