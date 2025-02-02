@@ -109,7 +109,7 @@ export default function Home() {
       {isOpen && (
         <Modal onClose={handleToggleModal}>
           <Form
-            onAddTodo={(newTodo) => {
+            onSubmitTodo={(newTodo) => {
               handleAddTodo(newTodo);
               handleToggleModal();
             }}

@@ -22,11 +22,11 @@ const todoSchema = z.object({
 type TodoFromForm = z.infer<typeof todoSchema>;
 
 interface FormProps {
-  onAddTodo: (newTodo: TodoFromForm) => void;
+  onSubmitTodo: (newTodo: TodoFromForm) => void;
   defaultValue?: Todo;
 }
 
-export default function Form({ onAddTodo, defaultValue }: FormProps) {
+export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
   const {
     register,
     handleSubmit,
@@ -36,7 +36,7 @@ export default function Form({ onAddTodo, defaultValue }: FormProps) {
     resolver: zodResolver(todoSchema),
   });
   function onSubmit(data: TodoFromForm) {
-    onAddTodo(data);
+    onSubmitTodo(data);
     reset();
   }
 

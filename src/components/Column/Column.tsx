@@ -90,7 +90,7 @@ export default function Column({
       {isOpen && (
         <Modal onClose={handleToggleModal}>
           <Form
-            onAddTodo={(updatedTodo) => {
+            onSubmitTodo={(updatedTodo) => {
               handleEditTodo(updatedTodo);
               handleToggleModal();
             }}
