@@ -93,14 +93,18 @@ export default function Home() {
       >
         <div className={styles.columnWrapper}>
           {columnNames.map((column, index) => {
-            const filteredTodos = todos?.filter(
+            const filteredTodos = todos.filter(
               (todo) => todo.column === column
             );
+            const today = new Date().getDay();
+            const isToday = today === index % 7 && column !== "Backlog";
+
             return (
               <Column
                 key={index}
+                isToday={isToday}
                 name={column}
-                todos={filteredTodos || []}
+                todos={filteredTodos}
                 onEditTodo={handleEditTodo}
                 onDeleteTodo={handleDeleteTodo}
               />

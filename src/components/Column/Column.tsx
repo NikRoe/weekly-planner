@@ -10,6 +10,7 @@ import SortableItem from "../SortableItem/SortableItem";
 interface ColumnProps {
   name: string;
   todos: TodoList;
+  isToday: boolean;
   onEditTodo: (updatedTodo: Todo) => void;
   onDeleteTodo: (idToDelete: string) => void;
 }
@@ -17,6 +18,7 @@ interface ColumnProps {
 export default function Column({
   name,
   todos,
+  isToday,
   onEditTodo,
   onDeleteTodo,
 }: ColumnProps) {
@@ -43,7 +45,10 @@ export default function Column({
 
   return (
     <>
-      <ul className={styles.list} ref={setNodeRef}>
+      <ul
+        className={`${styles.list} ${isToday ? styles.isToday : ""}`}
+        ref={setNodeRef}
+      >
         <h2 className={styles.title}>{name}</h2>
         <SortableContext items={todos.map((todo) => todo.id)}>
           {todos.map((todo) => (

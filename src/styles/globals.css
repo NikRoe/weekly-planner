@@ -3,6 +3,7 @@
   --foreground: #171717;
   --border-color: slategray;
   --hover-color: lightblue;
+  --highlight-color: lightblue;
 }
 
 @media (prefers-color-scheme: dark) {

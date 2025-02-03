@@ -12,6 +12,10 @@
   border-radius: 5px;
 }
 
+.isToday {
+  border: 3px solid var(--highlight-color);
+}
+
 .card {
   padding: 0.5rem;
   border: 2px solid var(--border-color);
