@@ -69,6 +69,9 @@ export default function Column({
                     aria-label={`Mark as ${
                       todo.status === "Done" ? "open" : "done"
                     }`}
+                    title={`Mark as ${
+                      todo.status === "Done" ? "open" : "done"
+                    }`}
                   ></button>
 
                   <button
@@ -79,6 +82,7 @@ export default function Column({
                     }}
                     aria-label="Eintrag löschen"
                     className={styles.deleteButton}
+                    title="Eintrag löschen"
                   >
                     X
                   </button>
