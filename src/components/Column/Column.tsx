@@ -56,31 +56,34 @@ export default function Column({
               }}
             >
               <>
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleUpdateStatus(todo);
-                  }}
-                  type="button"
-                  className={`${styles.button}   ${
-                    todo.status === "Done" ? styles.done : ""
-                  }`}
-                  aria-label={`Mark as ${
-                    todo.status === "Done" ? "open" : "done"
-                  }`}
-                ></button>
-                {todo.title}
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onDeleteTodo(todo.id);
-                  }}
-                  aria-label="Eintrag löschen"
-                  className={styles.deleteButton}
-                >
-                  X
-                </button>
+                <div className={styles.buttonWrapper}>
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleUpdateStatus(todo);
+                    }}
+                    type="button"
+                    className={`${styles.button}   ${
+                      todo.status === "Done" ? styles.done : ""
+                    }`}
+                    aria-label={`Mark as ${
+                      todo.status === "Done" ? "open" : "done"
+                    }`}
+                  ></button>
+
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDeleteTodo(todo.id);
+                    }}
+                    aria-label="Eintrag löschen"
+                    className={styles.deleteButton}
+                  >
+                    X
+                  </button>
+                </div>
+                <p>{todo.title}</p>
               </>
             </SortableItem>
           ))}
