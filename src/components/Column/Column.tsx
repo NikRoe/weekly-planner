@@ -12,6 +12,7 @@ import {
   handleDeleteTodo,
   handleEditTodo as onEditTodo,
 } from "@/services/todos";
+import { clipString } from "@/utils/clip";
 
 interface ColumnProps {
   name: string;
@@ -93,7 +94,9 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
                     <TrashIcon />
                   </button>
                 </div>
-                <p>{todo.title}</p>
+                <p>
+                  {todo.title.length > 25 ? clipString(todo.title) : todo.title}
+                </p>
               </>
             </SortableItem>
           ))}
