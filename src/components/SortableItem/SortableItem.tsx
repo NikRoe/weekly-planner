@@ -17,6 +17,9 @@ export default function SortableItem({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todo.id });
 
+  console.log("transform: ", transform);
+  console.log("transition: ", transition);
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,

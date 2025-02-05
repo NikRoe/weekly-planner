@@ -20,6 +20,7 @@ import {
 } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { DragEndEvent } from "@dnd-kit/core";
+import { SortableContext } from "@dnd-kit/sortable";
 
 export default function Home() {
   const {
@@ -91,26 +92,28 @@ export default function Home() {
         onDragEnd={optimisticHandleDragEnd}
         sensors={sensors}
       >
-        <div className={styles.columnWrapper}>
-          {columnNames.map((column, index) => {
-            const filteredTodos = todos.filter(
-              (todo) => todo.column === column
-            );
-            const today = new Date().getDay();
-            const isToday = today === index % 7 && column !== "Backlog";
+        <SortableContext items={todos.map((todo) => todo.id)}>
+          <div className={styles.columnWrapper}>
+            {columnNames.map((column, index) => {
+              const filteredTodos = todos.filter(
+                (todo) => todo.column === column
+              );
+              const today = new Date().getDay();
+              const isToday = today === index % 7 && column !== "Backlog";
 
-            return (
-              <Column
-                key={index}
-                isToday={isToday}
-                name={column}
-                todos={filteredTodos}
-                onEditTodo={handleEditTodo}
-                onDeleteTodo={handleDeleteTodo}
-              />
-            );
-          })}
-        </div>
+              return (
+                <Column
+                  key={index}
+                  isToday={isToday}
+                  name={column}
+                  todos={filteredTodos}
+                  onEditTodo={handleEditTodo}
+                  onDeleteTodo={handleDeleteTodo}
+                />
+              );
+            })}
+          </div>
+        </SortableContext>
       </DndContext>
 
       <button

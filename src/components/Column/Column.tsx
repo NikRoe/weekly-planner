@@ -4,7 +4,6 @@ import styles from "./Column.module.css";
 import Modal from "../Modal/Modal";
 import Form from "../Form/Form";
 import { useDroppable } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
 import SortableItem from "../SortableItem/SortableItem";
 
 interface ColumnProps {
@@ -50,53 +49,50 @@ export default function Column({
         ref={setNodeRef}
       >
         <h2 className={styles.title}>{name}</h2>
-        <SortableContext items={todos.map((todo) => todo.id)}>
-          {todos.map((todo) => (
-            <SortableItem
-              key={todo.id}
-              todo={todo}
-              onClick={() => {
-                handleToggleModal();
-                setTodoToEdit(todo);
-              }}
-            >
-              <>
-                <div className={styles.buttonWrapper}>
-                  <button
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleUpdateStatus(todo);
-                    }}
-                    type="button"
-                    className={styles.button}
-                    aria-label={`Mark as ${
-                      todo.status === "Done" ? "open" : "done"
-                    }`}
-                    title={`Mark as ${
-                      todo.status === "Done" ? "open" : "done"
-                    }`}
-                  >
-                    <DoneIcon status={todo.status} />
-                  </button>
 
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onDeleteTodo(todo.id);
-                    }}
-                    aria-label="Eintrag löschen"
-                    className={styles.deleteButton}
-                    title="Eintrag löschen"
-                  >
-                    X
-                  </button>
-                </div>
-                <p>{todo.title}</p>
-              </>
-            </SortableItem>
-          ))}
-        </SortableContext>
+        {todos.map((todo) => (
+          <SortableItem
+            key={todo.id}
+            todo={todo}
+            onClick={() => {
+              handleToggleModal();
+              setTodoToEdit(todo);
+            }}
+          >
+            <>
+              <div className={styles.buttonWrapper}>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleUpdateStatus(todo);
+                  }}
+                  type="button"
+                  className={styles.button}
+                  aria-label={`Mark as ${
+                    todo.status === "Done" ? "open" : "done"
+                  }`}
+                  title={`Mark as ${todo.status === "Done" ? "open" : "done"}`}
+                >
+                  <DoneIcon status={todo.status} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onDeleteTodo(todo.id);
+                  }}
+                  aria-label="Eintrag löschen"
+                  className={styles.deleteButton}
+                  title="Eintrag löschen"
+                >
+                  X
+                </button>
+              </div>
+              <p>{todo.title}</p>
+            </>
+          </SortableItem>
+        ))}
       </ul>
 
       {isOpen && (
