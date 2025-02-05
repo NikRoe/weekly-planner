@@ -11,6 +11,7 @@ import {
   PointerSensor,
   DragOverlay,
   DragStartEvent,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
@@ -21,7 +22,6 @@ import {
   handleEditTodo,
 } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import { DragEndEvent } from "@dnd-kit/core";
 import SortableItem from "@/components/SortableItem/SortableItem";
 
 export default function Home() {
@@ -55,7 +55,7 @@ export default function Home() {
     setActiveId(null);
     const { over, active, collisions } = event;
 
-    if (!over) return;
+    if (!over || !todos) return;
 
     const filteredCollisions = collisions?.filter((collision) =>
       columnNames.includes(collision.id as string)

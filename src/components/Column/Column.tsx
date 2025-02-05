@@ -6,6 +6,7 @@ import Form from "../Form/Form";
 import { useDroppable } from "@dnd-kit/core";
 import SortableItem from "../SortableItem/SortableItem";
 import { SortableContext } from "@dnd-kit/sortable";
+import { sortByStatus } from "@/utils/sort";
 
 interface ColumnProps {
   name: string;
@@ -51,7 +52,7 @@ export default function Column({
       >
         <h2 className={styles.title}>{name}</h2>
         <SortableContext items={todos.map((todo) => todo.id)}>
-          {todos.map((todo) => (
+          {todos.toSorted(sortByStatus).map((todo) => (
             <SortableItem
               key={todo.id}
               todo={todo}
