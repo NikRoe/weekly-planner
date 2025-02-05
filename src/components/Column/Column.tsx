@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { TodoList, TodoFromForm, Todo } from "../../../types/todo";
 import styles from "./Column.module.css";
 import Modal from "../Modal/Modal";
@@ -29,7 +29,6 @@ export default function Column({
   const { setNodeRef } = useDroppable({
     id: name,
   });
-  const listRef = useRef(null);
 
   function handleToggleModal() {
     setIsOpen(!isOpen);
@@ -47,7 +46,7 @@ export default function Column({
   }
 
   return (
-    <div ref={listRef}>
+    <>
       <ul
         className={`${styles.list} ${isToday ? styles.isToday : ""} ${
           todos.length > 4 ? styles.overflowY : ""
@@ -115,6 +114,6 @@ export default function Column({
           />
         </Modal>
       )}
-    </div>
+    </>
   );
 }
