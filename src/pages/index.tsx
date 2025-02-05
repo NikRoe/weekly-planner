@@ -23,6 +23,7 @@ import {
 } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
+import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
 
 export default function Home() {
   const {
@@ -101,36 +102,38 @@ export default function Home() {
         onDragStart={handleDragStart}
         sensors={sensors}
       >
-        <div className={styles.columnWrapper}>
-          {columnNames.map((column, index) => {
-            const filteredTodos = todos.filter(
-              (todo) => todo.column === column
-            );
-            const today = new Date().getDay();
-            const isToday = today === index % 7 && column !== "Backlog";
+        <ColumnWrapper>
+          <>
+            {columnNames.map((column, index) => {
+              const filteredTodos = todos.filter(
+                (todo) => todo.column === column
+              );
+              const today = new Date().getDay();
+              const isToday = today === index % 7 && column !== "Backlog";
 
-            return (
-              <Column
-                key={column}
-                isToday={isToday}
-                name={column}
-                todos={filteredTodos}
-                onEditTodo={handleEditTodo}
-                onDeleteTodo={handleDeleteTodo}
-              />
-            );
-          })}
-          <DragOverlay>
-            {activeId && (
-              <SortableItem
-                todo={todos.find((todo) => todo.id === activeId)}
-                isOverlay
-              >
-                <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
-              </SortableItem>
-            )}
-          </DragOverlay>
-        </div>
+              return (
+                <Column
+                  key={column}
+                  isToday={isToday}
+                  name={column}
+                  todos={filteredTodos}
+                  onEditTodo={handleEditTodo}
+                  onDeleteTodo={handleDeleteTodo}
+                />
+              );
+            })}
+            <DragOverlay>
+              {activeId && (
+                <SortableItem
+                  todo={todos.find((todo) => todo.id === activeId)}
+                  isOverlay
+                >
+                  <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
+                </SortableItem>
+              )}
+            </DragOverlay>
+          </>
+        </ColumnWrapper>
       </DndContext>
 
       <button
