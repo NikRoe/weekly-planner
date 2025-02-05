@@ -16,11 +16,7 @@ import {
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
-import {
-  handleAddTodo,
-  handleDeleteTodo,
-  handleEditTodo,
-} from "@/services/todos";
+import { handleAddTodo } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
@@ -117,8 +113,6 @@ export default function Home() {
                   isToday={isToday}
                   name={column}
                   todos={filteredTodos}
-                  onEditTodo={handleEditTodo}
-                  onDeleteTodo={handleDeleteTodo}
                 />
               );
             })}

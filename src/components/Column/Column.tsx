@@ -8,22 +8,18 @@ import SortableItem from "../SortableItem/SortableItem";
 import { SortableContext } from "@dnd-kit/sortable";
 import { sortByStatus } from "@/utils/sort";
 import { DoneIcon, TrashIcon } from "../Svg";
+import {
+  handleDeleteTodo,
+  handleEditTodo as onEditTodo,
+} from "@/services/todos";
 
 interface ColumnProps {
   name: string;
   todos: TodoList;
   isToday: boolean;
-  onEditTodo: (updatedTodo: Todo) => void;
-  onDeleteTodo: (idToDelete: string) => void;
 }
 
-export default function Column({
-  name,
-  todos,
-  isToday,
-  onEditTodo,
-  onDeleteTodo,
-}: ColumnProps) {
+export default function Column({ name, todos, isToday }: ColumnProps) {
   const [todoToEdit, setTodoToEdit] = useState<Todo>();
   const [isOpen, setIsOpen] = useState(false);
   const { setNodeRef } = useDroppable({
@@ -87,7 +83,8 @@ export default function Column({
                     type="button"
                     onClick={(event) => {
                       event.stopPropagation();
-                      onDeleteTodo(todo.id);
+
+                      handleDeleteTodo(todo.id);
                     }}
                     aria-label="Eintrag löschen"
                     className={styles.deleteButton}
