@@ -47,11 +47,9 @@
   border-radius: 50%;
   height: 16px;
   width: 16px;
-  background: orange;
-}
-
-.done {
-  background: green;
+  background: none;
+  display: flex;
+  align-items: center;
 }
 
 .deleteButton {

@@ -32,7 +32,7 @@ export default function Home() {
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
-      delay: 50,
+      delay: 100,
       tolerance: 5,
     },
   });

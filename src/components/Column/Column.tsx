@@ -68,16 +68,16 @@ export default function Column({
                       handleUpdateStatus(todo);
                     }}
                     type="button"
-                    className={`${styles.button}   ${
-                      todo.status === "Done" ? styles.done : ""
-                    }`}
+                    className={styles.button}
                     aria-label={`Mark as ${
                       todo.status === "Done" ? "open" : "done"
                     }`}
                     title={`Mark as ${
                       todo.status === "Done" ? "open" : "done"
                     }`}
-                  ></button>
+                  >
+                    <DoneIcon status={todo.status} />
+                  </button>
 
                   <button
                     type="button"
@@ -111,5 +111,28 @@ export default function Column({
         </Modal>
       )}
     </>
+  );
+}
+
+function DoneIcon({ status }: { status: string }) {
+  return (
+    <svg
+      fill={status === "Done" ? "#3ac200" : "white"}
+      width="16px"
+      height="16px"
+      viewBox="0 -1.5 27 27"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke={status === "Done" ? "#3ac200" : "white"}
+    >
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path d="m24 24h-24v-24h18.4v2.4h-16v19.2h20v-8.8h2.4v11.2zm-19.52-12.42 1.807-1.807 5.422 5.422 13.68-13.68 1.811 1.803-15.491 15.491z"></path>
+      </g>
+    </svg>
   );
 }
