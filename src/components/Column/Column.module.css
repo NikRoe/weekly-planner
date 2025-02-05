@@ -27,7 +27,7 @@
   border-radius: 5px;
   background-color: var(--card);
   height: 5rem;
-  cursor: pointer;
+  cursor: grab;
   width: 100%;
   display: flex;
   flex-direction: column;
