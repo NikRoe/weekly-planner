@@ -30,6 +30,11 @@
   font-size: large;
 }
 
+.boxShadow {
+  box-shadow: 1px 1px 7px grey, -1px -1px 7px grey, -1px 1px 7px grey,
+    1px -1px 7px grey;
+}
+
 .title {
   text-align: center;
   border-bottom: 2px dotted var(--border-color);

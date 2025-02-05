@@ -4,21 +4,27 @@ import { Todo } from "../../../types/todo";
 import styles from "../Column/Column.module.css";
 
 interface SortableItemProps {
-  todo: Todo;
-  children: JSX.Element;
-  onClick: () => void;
+  todo?: Todo;
+  children?: JSX.Element;
+  onClick?: () => void;
+  isOverlay?: boolean;
 }
 
+const defaultTodo = {
+  id: "12",
+  title: "Briefe",
+  column: "Donnerstag",
+  status: "Done",
+};
+
 export default function SortableItem({
-  todo,
+  todo = defaultTodo,
   children,
   onClick,
+  isOverlay = false,
 }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todo.id });
-
-  console.log("transform: ", transform);
-  console.log("transition: ", transition);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -28,7 +34,7 @@ export default function SortableItem({
   return (
     <li
       onClick={onClick}
-      className={styles.card}
+      className={`${styles.card} ${isOverlay ? styles.boxShadow : ""}`}
       ref={setNodeRef}
       style={style}
       {...attributes}

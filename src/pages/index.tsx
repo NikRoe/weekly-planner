@@ -9,6 +9,8 @@ import {
   useSensor,
   useSensors,
   PointerSensor,
+  DragOverlay,
+  DragStartEvent,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
@@ -20,7 +22,7 @@ import {
 } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { DragEndEvent } from "@dnd-kit/core";
-import { SortableContext } from "@dnd-kit/sortable";
+import SortableItem from "@/components/SortableItem/SortableItem";
 
 export default function Home() {
   const {
@@ -30,6 +32,7 @@ export default function Home() {
     mutate,
   } = useSWR<TodoList>("/api/todos");
   const [isOpen, setIsOpen] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -49,6 +52,7 @@ export default function Home() {
   if (!todos) return;
 
   function optimisticHandleDragEnd(event: DragEndEvent) {
+    setActiveId(null);
     const { over, active, collisions } = event;
 
     if (!over) return;
@@ -84,36 +88,49 @@ export default function Home() {
     );
   }
 
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
+
   return (
     <>
       <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
       <DndContext
         collisionDetection={closestCorners}
         onDragEnd={optimisticHandleDragEnd}
+        onDragStart={handleDragStart}
         sensors={sensors}
       >
-        <SortableContext items={todos.map((todo) => todo.id)}>
-          <div className={styles.columnWrapper}>
-            {columnNames.map((column, index) => {
-              const filteredTodos = todos.filter(
-                (todo) => todo.column === column
-              );
-              const today = new Date().getDay();
-              const isToday = today === index % 7 && column !== "Backlog";
+        <div className={styles.columnWrapper}>
+          {columnNames.map((column, index) => {
+            const filteredTodos = todos.filter(
+              (todo) => todo.column === column
+            );
+            const today = new Date().getDay();
+            const isToday = today === index % 7 && column !== "Backlog";
 
-              return (
-                <Column
-                  key={index}
-                  isToday={isToday}
-                  name={column}
-                  todos={filteredTodos}
-                  onEditTodo={handleEditTodo}
-                  onDeleteTodo={handleDeleteTodo}
-                />
-              );
-            })}
-          </div>
-        </SortableContext>
+            return (
+              <Column
+                key={column}
+                isToday={isToday}
+                name={column}
+                todos={filteredTodos}
+                onEditTodo={handleEditTodo}
+                onDeleteTodo={handleDeleteTodo}
+              />
+            );
+          })}
+          <DragOverlay>
+            {activeId && (
+              <SortableItem
+                todo={todos.find((todo) => todo.id === activeId)}
+                isOverlay
+              >
+                <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
+              </SortableItem>
+            )}
+          </DragOverlay>
+        </div>
       </DndContext>
 
       <button

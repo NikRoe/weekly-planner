@@ -5,6 +5,7 @@ import Modal from "../Modal/Modal";
 import Form from "../Form/Form";
 import { useDroppable } from "@dnd-kit/core";
 import SortableItem from "../SortableItem/SortableItem";
+import { SortableContext } from "@dnd-kit/sortable";
 
 interface ColumnProps {
   name: string;
@@ -49,50 +50,53 @@ export default function Column({
         ref={setNodeRef}
       >
         <h2 className={styles.title}>{name}</h2>
+        <SortableContext items={todos.map((todo) => todo.id)}>
+          {todos.map((todo) => (
+            <SortableItem
+              key={todo.id}
+              todo={todo}
+              onClick={() => {
+                handleToggleModal();
+                setTodoToEdit(todo);
+              }}
+            >
+              <>
+                <div className={styles.buttonWrapper}>
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleUpdateStatus(todo);
+                    }}
+                    type="button"
+                    className={styles.button}
+                    aria-label={`Mark as ${
+                      todo.status === "Done" ? "open" : "done"
+                    }`}
+                    title={`Mark as ${
+                      todo.status === "Done" ? "open" : "done"
+                    }`}
+                  >
+                    <DoneIcon status={todo.status} />
+                  </button>
 
-        {todos.map((todo) => (
-          <SortableItem
-            key={todo.id}
-            todo={todo}
-            onClick={() => {
-              handleToggleModal();
-              setTodoToEdit(todo);
-            }}
-          >
-            <>
-              <div className={styles.buttonWrapper}>
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleUpdateStatus(todo);
-                  }}
-                  type="button"
-                  className={styles.button}
-                  aria-label={`Mark as ${
-                    todo.status === "Done" ? "open" : "done"
-                  }`}
-                  title={`Mark as ${todo.status === "Done" ? "open" : "done"}`}
-                >
-                  <DoneIcon status={todo.status} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onDeleteTodo(todo.id);
-                  }}
-                  aria-label="Eintrag löschen"
-                  className={styles.deleteButton}
-                  title="Eintrag löschen"
-                >
-                  X
-                </button>
-              </div>
-              <p>{todo.title}</p>
-            </>
-          </SortableItem>
-        ))}
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDeleteTodo(todo.id);
+                    }}
+                    aria-label="Eintrag löschen"
+                    className={styles.deleteButton}
+                    title="Eintrag löschen"
+                  >
+                    X
+                  </button>
+                </div>
+                <p>{todo.title}</p>
+              </>
+            </SortableItem>
+          ))}
+        </SortableContext>
       </ul>
 
       {isOpen && (
