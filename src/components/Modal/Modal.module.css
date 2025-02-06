@@ -14,7 +14,7 @@
 
 .innerWrapper {
   position: relative;
-  top: 20vh;
+  top: 7.5vh;
   max-width: 350px;
   transform: translate(calc(50vw - 50%));
 }
@@ -22,6 +22,7 @@
 @media (width > 667px) {
   .innerWrapper {
     max-width: 500px;
+    top: 20vh;
   }
 }
 
