@@ -13,6 +13,7 @@ import {
   handleEditTodo as onEditTodo,
 } from "@/services/todos";
 import { clipString } from "@/utils/clip";
+import { createPortal } from "react-dom";
 
 interface ColumnProps {
   name: string;
@@ -103,17 +104,19 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
         </SortableContext>
       </ul>
 
-      {isOpen && (
-        <Modal onClose={handleToggleModal}>
-          <Form
-            onSubmitTodo={(updatedTodo) => {
-              handleEditTodo(updatedTodo);
-              handleToggleModal();
-            }}
-            defaultValue={todoToEdit}
-          />
-        </Modal>
-      )}
+      {isOpen &&
+        createPortal(
+          <Modal onClose={handleToggleModal}>
+            <Form
+              onSubmitTodo={(updatedTodo) => {
+                handleEditTodo(updatedTodo);
+                handleToggleModal();
+              }}
+              defaultValue={todoToEdit}
+            />
+          </Modal>,
+          document.body
+        )}
     </>
   );
 }

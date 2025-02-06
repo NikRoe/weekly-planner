@@ -14,8 +14,14 @@
 .innerWrapper {
   position: relative;
   top: 25vh;
+  max-width: 350px;
   transform: translate(calc(50vw - 50%));
-  max-width: 400px;
+}
+
+@media (width > 667px) {
+  .innerWrapper {
+    max-width: 500px;
+  }
 }
 
 .outerWrapper {
@@ -24,4 +30,5 @@
   position: absolute;
   top: 0;
   backdrop-filter: blur(10px);
+  z-index: 10;
 }
