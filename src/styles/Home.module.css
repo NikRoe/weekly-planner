@@ -5,8 +5,9 @@
   cursor: pointer;
   border: none;
   background: none;
+  color: var(--cta-text);
 }
 
 .button:hover {
-  color: var(--hover-color);
+  color: var(--cta-bg);
 }
