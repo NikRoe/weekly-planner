@@ -13,7 +13,7 @@
 
 .innerWrapper {
   position: relative;
-  top: 25vh;
+  top: 20vh;
   max-width: 350px;
   transform: translate(calc(50vw - 50%));
 }

@@ -50,25 +50,26 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         {...register("title")}
         defaultValue={defaultValue?.title}
         autoFocus
+        className={styles.input}
       />
       {errors.title && <p className={styles.error}>{errors.title.message}</p>}
-      <label>
-        Wochentag*
-        <select
-          required
-          {...register("column")}
-          defaultValue={defaultValue?.column}
-        >
-          <option value="Backlog">Backlog</option>
-          <option value="Montag">Montag</option>
-          <option value="Dienstag">Dienstag</option>
-          <option value="Mittwoch">Mittwoch</option>
-          <option value="Donnerstag">Donnerstag</option>
-          <option value="Freitag">Freitag</option>
-          <option value="Samstag">Samstag</option>
-          <option value="Sonntag">Sonntag</option>
-        </select>
-      </label>
+      <label htmlFor="weekday">Wochentag*</label>
+      <select
+        id="weekday"
+        required
+        {...register("column")}
+        defaultValue={defaultValue?.column}
+        className={styles.select}
+      >
+        <option value="Backlog">Backlog</option>
+        <option value="Montag">Montag</option>
+        <option value="Dienstag">Dienstag</option>
+        <option value="Mittwoch">Mittwoch</option>
+        <option value="Donnerstag">Donnerstag</option>
+        <option value="Freitag">Freitag</option>
+        <option value="Samstag">Samstag</option>
+        <option value="Sonntag">Sonntag</option>
+      </select>
       {errors.column && (
         <p className={styles.error}>Bitte einen Wochentag auswählen</p>
       )}
@@ -78,6 +79,7 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         {...register("notes")}
         id="notes"
         defaultValue={defaultValue?.notes}
+        className={styles.textarea}
       ></textarea>
       <button
         type="submit"

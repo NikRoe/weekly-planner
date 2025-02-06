@@ -4,6 +4,8 @@
   --border-color: slategray;
   --hover-color: lightblue;
   --highlight-color: lightblue;
+  --input-bg: #ffffff;
+  --text-color: #333333;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -11,6 +13,8 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --card: rgb(22 25 31);
+    --input-bg: #3a3a3a;
+    --text-color: #f1f1f1;
   }
 }
 
