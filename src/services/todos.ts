@@ -32,3 +32,12 @@ export async function handleEditTodo(updatedTodo: Todo) {
     mutate("/api/todos");
   }
 }
+
+export async function handleResetTodoStatus() {
+  const response = await fetch("/api/todos", {
+    method: "PATCH",
+  });
+  if (response.ok) {
+    mutate("/api/todos");
+  }
+}

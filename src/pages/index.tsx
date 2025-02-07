@@ -16,10 +16,11 @@ import {
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
-import { handleAddTodo } from "@/services/todos";
+import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
+import { Revert } from "@/components/Svg";
 
 export default function Home() {
   const {
@@ -91,65 +92,93 @@ export default function Home() {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragEnd={optimisticHandleDragEnd}
-        onDragStart={handleDragStart}
-        sensors={sensors}
-      >
-        <ColumnWrapper>
-          <>
-            {columnNames.map((column, index) => {
-              const filteredTodos = todos.filter(
-                (todo) => todo.column === column
-              );
-              const today = new Date().getDay();
-              const isToday = today === index % 7 && column !== "Backlog";
+      <header style={{ position: "relative" }}>
+        <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
+        <button
+          type="button"
+          onClick={() => {
+            if (todos.some((todo) => todo.status === "Done")) {
+              // nur wenn mindestens 1 Eintrag auf "Done" steht, wird API Request gestellt
+              // und wenn der User bestätigt
+              if (confirm("Sicher?")) {
+                // API Request updated alle Einträge und setzt status auf "Open"
+                handleResetTodoStatus();
+              }
+            }
+          }}
+          style={{
+            position: "absolute",
+            top: "12px",
+            left: "75vw",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+          title="Set all todos to open"
+        >
+          <Revert />
+        </button>
+      </header>
+      <main>
+        <DndContext
+          collisionDetection={closestCorners}
+          onDragEnd={optimisticHandleDragEnd}
+          onDragStart={handleDragStart}
+          sensors={sensors}
+        >
+          <ColumnWrapper>
+            <>
+              {columnNames.map((column, index) => {
+                const filteredTodos = todos.filter(
+                  (todo) => todo.column === column
+                );
+                const today = new Date().getDay();
+                const isToday = today === index % 7 && column !== "Backlog";
 
-              return (
-                <Column
-                  key={column}
-                  isToday={isToday}
-                  name={column}
-                  todos={filteredTodos}
-                />
-              );
-            })}
-            <DragOverlay>
-              {activeId && (
-                <SortableItem
-                  todo={todos.find((todo) => todo.id === activeId)}
-                  isOverlay
-                >
-                  <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
-                </SortableItem>
-              )}
-            </DragOverlay>
-          </>
-        </ColumnWrapper>
-      </DndContext>
+                return (
+                  <Column
+                    key={column}
+                    isToday={isToday}
+                    name={column}
+                    todos={filteredTodos}
+                  />
+                );
+              })}
+              <DragOverlay>
+                {activeId && (
+                  <SortableItem
+                    todo={todos.find((todo) => todo.id === activeId)}
+                    isOverlay
+                  >
+                    <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
+                  </SortableItem>
+                )}
+              </DragOverlay>
+            </>
+          </ColumnWrapper>
+        </DndContext>
 
-      <button
-        type="button"
-        aria-label="open form to add todo"
-        onClick={handleToggleModal}
-        disabled={isOpen}
-        className={styles.button}
-      >
-        +
-      </button>
+        <button
+          type="button"
+          aria-label="open form to add todo"
+          onClick={handleToggleModal}
+          disabled={isOpen}
+          className={styles.button}
+        >
+          +
+        </button>
 
-      {isOpen && (
-        <Modal onClose={handleToggleModal}>
-          <Form
-            onSubmitTodo={(newTodo) => {
-              handleAddTodo(newTodo);
-              handleToggleModal();
-            }}
-          />
-        </Modal>
-      )}
+        {isOpen && (
+          <Modal onClose={handleToggleModal}>
+            <Form
+              onSubmitTodo={(newTodo) => {
+                handleAddTodo(newTodo);
+                handleToggleModal();
+              }}
+            />
+          </Modal>
+        )}
+      </main>
     </>
   );
 }

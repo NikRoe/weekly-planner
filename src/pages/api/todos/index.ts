@@ -20,6 +20,12 @@ export default async function handler(
     return response.status(201).json(newTodo);
   }
 
-  response.setHeader("Allow", ["GET", "POST"]);
+  if (request.method === "PATCH") {
+    await prisma.todo.updateMany({ data: { status: "Open" } });
+
+    return response.status(200).json("Todos updated successfully");
+  }
+
+  response.setHeader("Allow", ["GET", "POST", "PATCH"]);
   response.status(405).end(`Method ${request.method} Not Allowed`);
 }
