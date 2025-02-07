@@ -16,11 +16,12 @@ import {
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
-import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
+import { handleAddTodo } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
-import { Revert } from "@/components/Svg";
+
+import Header from "@/components/Header/Header";
 
 export default function Home() {
   const {
@@ -92,33 +93,7 @@ export default function Home() {
 
   return (
     <>
-      <header style={{ position: "relative" }}>
-        <h1 style={{ textAlign: "center", margin: "1rem" }}>Weekly Planner</h1>
-        <button
-          type="button"
-          onClick={() => {
-            if (todos.some((todo) => todo.status === "Done")) {
-              // nur wenn mindestens 1 Eintrag auf "Done" steht, wird API Request gestellt
-              // und wenn der User bestätigt
-              if (confirm("Sicher?")) {
-                // API Request updated alle Einträge und setzt status auf "Open"
-                handleResetTodoStatus();
-              }
-            }
-          }}
-          style={{
-            position: "absolute",
-            top: "12px",
-            left: "75vw",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-          }}
-          title="Set all todos to open"
-        >
-          <Revert />
-        </button>
-      </header>
+      <Header todos={todos} />
       <main>
         <DndContext
           collisionDetection={closestCorners}
