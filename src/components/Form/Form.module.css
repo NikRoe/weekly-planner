@@ -61,6 +61,6 @@
   background-color: var(--background-error);
   padding: 0.5rem;
   border-radius: 6px;
-  border-left: 5px solid #d9534f;
+  border-left: 5px solid var(--border-error);
   margin-top: -0.5rem;
 }

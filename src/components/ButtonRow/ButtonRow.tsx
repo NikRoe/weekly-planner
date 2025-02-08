@@ -4,17 +4,12 @@ import Button from "../Button/Button";
 import Form from "../Form/Form";
 import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
 import { AddIcon, RevertIcon } from "../Svg";
+import styles from "./ButtonRow.module.css";
 
 export default function ButtonRow({ todos }: { todos: TodoList }) {
   const { openModal, closeModal } = useModal();
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        paddingBottom: "1rem",
-      }}
-    >
+    <div className={styles.wrapper}>
       <Button
         type="button"
         ariaLabel="open form to add todo"
@@ -62,7 +57,7 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
                 </Button>
               </>
             ) : (
-              <p style={{ maxWidth: "80%" }}>
+              <p className={styles.noEntryMessage}>
                 Keine Einträge vorhanden, deren Status auf Open gesetzt werden
                 kann.
               </p>
