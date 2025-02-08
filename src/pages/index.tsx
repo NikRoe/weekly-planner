@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
 import {
   DndContext,
@@ -14,14 +13,11 @@ import {
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
-import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
 import Header from "@/components/Header/Header";
-import { AddIcon, Revert } from "@/components/Svg";
-import Button from "@/components/Button/Button";
-import { useModal } from "@/provider/ModalProvider";
+import ButtonRow from "@/components/ButtonRow/ButtonRow";
 
 export default function Home() {
   const {
@@ -39,7 +35,6 @@ export default function Home() {
       tolerance: 5,
     },
   });
-  const { openModal, closeModal } = useModal();
 
   const sensors = useSensors(pointerSensor);
 
@@ -92,71 +87,7 @@ export default function Home() {
     <>
       <Header />
       <main>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            paddingBottom: "1rem",
-          }}
-        >
-          <Button
-            type="button"
-            ariaLabel="open form to add todo"
-            onClick={() =>
-              openModal(
-                <Form
-                  onSubmitTodo={(newTodo) => {
-                    handleAddTodo(newTodo);
-                    closeModal();
-                  }}
-                />
-              )
-            }
-            title="open form to add todo"
-          >
-            <AddIcon />
-          </Button>
-
-          <Button
-            type="button"
-            ariaLabel="Set all todos to open"
-            title="Set all todos to open"
-            onClick={() =>
-              openModal(
-                todos.some((todo) => todo.status === "Done") ? (
-                  <>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        handleResetTodoStatus();
-                        closeModal();
-                      }}
-                      ariaLabel="Set all todos to open"
-                      title="Set all todos to open"
-                    >
-                      Alles auf Open setzen
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={closeModal}
-                      ariaLabel="Abbrechen"
-                      title="Abbrechen"
-                    >
-                      Abbrechen
-                    </Button>
-                  </>
-                ) : (
-                  <p style={{ maxWidth: "80%" }}>
-                    Keine Einträge vorhanden, deren Status auf Open gesetzt
-                    werden kann.
-                  </p>
-                )
-              )
-            }
-          >
-            <Revert />
-          </Button>
-        </div>
+        <ButtonRow todos={todos} />
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={optimisticHandleDragEnd}

@@ -49,7 +49,7 @@ export function TrashIcon() {
   );
 }
 
-export function Revert() {
+export function RevertIcon() {
   return (
     <svg
       width="24px"
