@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import styles from "./ColumnWrapper.module.css";
 
-export default function ColumnWrapper({ children }: { children: JSX.Element }) {
+export default function ColumnWrapper({ children }: { children: ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const id = setTimeout(() => {
@@ -13,6 +13,7 @@ export default function ColumnWrapper({ children }: { children: JSX.Element }) {
 
     return () => clearTimeout(id);
   }, []);
+
   return (
     <div className={styles.columnWrapper} ref={wrapperRef}>
       {children}

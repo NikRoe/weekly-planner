@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import styles from "./Modal.module.css";
 
 interface ModalProps {
-  children: JSX.Element;
+  children: ReactNode;
   onClose: () => void;
 }
 

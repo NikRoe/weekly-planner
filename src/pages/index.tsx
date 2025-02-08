@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Form from "@/components/Form/Form";
 import Column from "@/components/Column/Column";
-import styles from "@/styles/Home.module.css";
-import Modal from "@/components/Modal/Modal";
 import {
   DndContext,
   closestCorners,
@@ -16,12 +14,14 @@ import {
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
-import { handleAddTodo } from "@/services/todos";
+import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
-
 import Header from "@/components/Header/Header";
+import { AddIcon, Revert } from "@/components/Svg";
+import Button from "@/components/Button/Button";
+import { useModal } from "@/provider/ModalProvider";
 
 export default function Home() {
   const {
@@ -30,7 +30,7 @@ export default function Home() {
     error,
     mutate,
   } = useSWR<TodoList>("/api/todos");
-  const [isOpen, setIsOpen] = useState(false);
+
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const pointerSensor = useSensor(PointerSensor, {
@@ -39,12 +39,9 @@ export default function Home() {
       tolerance: 5,
     },
   });
+  const { openModal, closeModal } = useModal();
 
   const sensors = useSensors(pointerSensor);
-
-  function handleToggleModal() {
-    setIsOpen(!isOpen);
-  }
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
@@ -93,8 +90,73 @@ export default function Home() {
 
   return (
     <>
-      <Header todos={todos} />
+      <Header />
       <main>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            paddingBottom: "1rem",
+          }}
+        >
+          <Button
+            type="button"
+            ariaLabel="open form to add todo"
+            onClick={() =>
+              openModal(
+                <Form
+                  onSubmitTodo={(newTodo) => {
+                    handleAddTodo(newTodo);
+                    closeModal();
+                  }}
+                />
+              )
+            }
+            title="open form to add todo"
+          >
+            <AddIcon />
+          </Button>
+
+          <Button
+            type="button"
+            ariaLabel="Set all todos to open"
+            title="Set all todos to open"
+            onClick={() =>
+              openModal(
+                todos.some((todo) => todo.status === "Done") ? (
+                  <>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        handleResetTodoStatus();
+                        closeModal();
+                      }}
+                      ariaLabel="Set all todos to open"
+                      title="Set all todos to open"
+                    >
+                      Alles auf Open setzen
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={closeModal}
+                      ariaLabel="Abbrechen"
+                      title="Abbrechen"
+                    >
+                      Abbrechen
+                    </Button>
+                  </>
+                ) : (
+                  <p style={{ maxWidth: "80%" }}>
+                    Keine Einträge vorhanden, deren Status auf Open gesetzt
+                    werden kann.
+                  </p>
+                )
+              )
+            }
+          >
+            <Revert />
+          </Button>
+        </div>
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={optimisticHandleDragEnd}
@@ -132,27 +194,6 @@ export default function Home() {
             </>
           </ColumnWrapper>
         </DndContext>
-
-        <button
-          type="button"
-          aria-label="open form to add todo"
-          onClick={handleToggleModal}
-          disabled={isOpen}
-          className={styles.button}
-        >
-          +
-        </button>
-
-        {isOpen && (
-          <Modal onClose={handleToggleModal}>
-            <Form
-              onSubmitTodo={(newTodo) => {
-                handleAddTodo(newTodo);
-                handleToggleModal();
-              }}
-            />
-          </Modal>
-        )}
       </main>
     </>
   );

@@ -2,10 +2,11 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Todo } from "../../../types/todo";
 import styles from "../Column/Column.module.css";
+import { ReactNode } from "react";
 
 interface SortableItemProps {
   todo?: Todo;
-  children?: JSX.Element;
+  children?: ReactNode;
   onClick?: () => void;
   isOverlay?: boolean;
 }
