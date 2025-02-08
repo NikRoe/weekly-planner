@@ -13,6 +13,7 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
       <Button
         type="button"
         ariaLabel="open form to add todo"
+        variant="svg"
         onClick={() =>
           openModal(
             <Form
@@ -32,10 +33,11 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
         type="button"
         ariaLabel="Set all todos to open"
         title="Set all todos to open"
-        onClick={() =>
-          openModal(
-            todos.some((todo) => todo.status === "Done") ? (
-              <>
+        variant="svg"
+        onClick={() => {
+          if (todos.some((todo) => todo.status === "Done")) {
+            openModal(
+              <div className={`${styles.wrapper} ${styles.border}`}>
                 <Button
                   type="button"
                   onClick={() => {
@@ -44,6 +46,7 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
                   }}
                   ariaLabel="Set all todos to open"
                   title="Set all todos to open"
+                  variant="danger"
                 >
                   Alles auf Open setzen
                 </Button>
@@ -52,18 +55,22 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
                   onClick={closeModal}
                   ariaLabel="Abbrechen"
                   title="Abbrechen"
+                  variant="default"
                 >
                   Abbrechen
                 </Button>
-              </>
-            ) : (
+              </div>,
+              true
+            );
+          } else {
+            openModal(
               <p className={styles.noEntryMessage}>
                 Keine Einträge vorhanden, deren Status auf Open gesetzt werden
                 kann.
               </p>
-            )
-          )
-        }
+            );
+          }
+        }}
       >
         <RevertIcon />
       </Button>

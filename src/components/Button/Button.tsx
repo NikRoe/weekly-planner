@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import styles from "./Button.module.css";
 
 interface ButtonProps {
   type: "submit" | "button" | "reset";
@@ -6,6 +7,7 @@ interface ButtonProps {
   title: string;
   children: ReactNode;
   ariaLabel: string;
+  variant: string;
   disabled?: boolean;
 }
 
@@ -16,7 +18,16 @@ export default function Button({
   ariaLabel,
   disabled = false,
   children,
+  variant,
 }: ButtonProps) {
+  const className =
+    variant === "default"
+      ? styles.button
+      : variant === "danger"
+      ? styles.danger
+      : variant === "svg"
+      ? styles.svg
+      : "";
   return (
     <button
       type={type}
@@ -24,8 +35,7 @@ export default function Button({
       title={title}
       disabled={disabled}
       aria-label={ariaLabel}
-      className=""
-      style={{ background: "none", border: "none", cursor: "pointer" }}
+      className={className}
     >
       {children}
     </button>

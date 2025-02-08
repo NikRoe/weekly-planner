@@ -2,7 +2,7 @@ import Modal from "@/components/Modal/Modal";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface ModalContextType {
-  openModal: (content: ReactNode) => void;
+  openModal: (content: ReactNode, hideCloseButton?: boolean) => void;
   closeModal: () => void;
 }
 
@@ -10,9 +10,11 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export function ModalProvider({ children }: { children: ReactNode }) {
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const [hideCloseButton, setHideCloseButton] = useState(false);
 
-  function openModal(content: ReactNode) {
+  function openModal(content: ReactNode, hideCloseButton = false) {
     setModalContent(content);
+    setHideCloseButton(hideCloseButton);
   }
 
   function closeModal() {
@@ -22,7 +24,11 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-      {modalContent && <Modal onClose={closeModal}>{modalContent}</Modal>}
+      {modalContent && (
+        <Modal onClose={closeModal} hideCloseButton={hideCloseButton}>
+          {modalContent}
+        </Modal>
+      )}
     </ModalContext.Provider>
   );
 }

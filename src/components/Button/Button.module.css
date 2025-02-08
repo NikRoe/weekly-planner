@@ -1,0 +1,44 @@
+.button {
+  align-self: center;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+
+  font-size: 1em;
+  border: none;
+  border-radius: 14px;
+  background-color: var(--cta-bg);
+  color: var(--cta-text);
+}
+
+.button:hover {
+  background-color: var(--cta-hover-bg);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.svg {
+  cursor: pointer;
+  background: none;
+  font-size: 1em;
+  border: none;
+  border-radius: 14px;
+}
+
+.danger {
+  align-self: center;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+
+  font-size: 1em;
+  border: none;
+  border-radius: 14px;
+
+  background-color: var(--background-error);
+  color: var(--color-error);
+}
+
+.danger:hover {
+  background-color: var(--background-error-hover);
+}

@@ -4,9 +4,14 @@ import styles from "./Modal.module.css";
 interface ModalProps {
   children: ReactNode;
   onClose: () => void;
+  hideCloseButton: boolean;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
+export default function Modal({
+  children,
+  onClose,
+  hideCloseButton,
+}: ModalProps) {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.code === "Escape") {
@@ -29,14 +34,16 @@ export default function Modal({ children, onClose }: ModalProps) {
       }}
     >
       <div className={styles.innerWrapper}>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="close form"
-          className={styles.button}
-        >
-          X
-        </button>
+        {!hideCloseButton && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="close"
+            className={styles.button}
+          >
+            X
+          </button>
+        )}
         {children}
       </div>
     </div>
