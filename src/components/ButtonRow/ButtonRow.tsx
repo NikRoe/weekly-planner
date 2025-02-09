@@ -5,11 +5,12 @@ import Form from "../Form/Form";
 import { handleAddTodo, handleResetTodoStatus } from "@/services/todos";
 import { AddIcon, RevertIcon } from "../Svg";
 import styles from "./ButtonRow.module.css";
+import Wrapper from "../Wrapper/Wrapper";
 
 export default function ButtonRow({ todos }: { todos: TodoList }) {
   const { openModal, closeModal } = useModal();
   return (
-    <div className={styles.wrapper}>
+    <Wrapper>
       <Button
         type="button"
         ariaLabel="open form to add todo"
@@ -37,7 +38,7 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
         onClick={() => {
           if (todos.some((todo) => todo.status === "Done")) {
             openModal(
-              <div className={`${styles.wrapper} ${styles.border}`}>
+              <Wrapper>
                 <Button
                   type="button"
                   onClick={() => {
@@ -59,7 +60,7 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
                 >
                   Abbrechen
                 </Button>
-              </div>,
+              </Wrapper>,
               true
             );
           } else {
@@ -74,6 +75,6 @@ export default function ButtonRow({ todos }: { todos: TodoList }) {
       >
         <RevertIcon />
       </Button>
-    </div>
+    </Wrapper>
   );
 }

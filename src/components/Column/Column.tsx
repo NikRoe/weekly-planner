@@ -13,6 +13,7 @@ import {
 import { clipString } from "@/utils/clip";
 import { useModal } from "@/provider/ModalProvider";
 import Button from "../Button/Button";
+import Wrapper from "../Wrapper/Wrapper";
 
 interface ColumnProps {
   name: string;
@@ -52,7 +53,7 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
                   <Form
                     onSubmitTodo={(updatedTodo) => {
                       onEditTodo({
-                        ...(todo as Todo),
+                        ...todo,
                         ...updatedTodo,
                       });
                       closeModal();
@@ -85,8 +86,32 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
                     type="button"
                     onClick={(event) => {
                       event?.stopPropagation();
-
-                      handleDeleteTodo(todo.id);
+                      openModal(
+                        <Wrapper>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              handleDeleteTodo(todo.id);
+                              closeModal();
+                            }}
+                            ariaLabel="Todo löschen"
+                            title="Todo löschen"
+                            variant="danger"
+                          >
+                            Todo wirklich löschen?
+                          </Button>
+                          <Button
+                            type="button"
+                            onClick={closeModal}
+                            ariaLabel="Abbrechen"
+                            title="Abbrechen"
+                            variant="default"
+                          >
+                            Abbrechen
+                          </Button>
+                        </Wrapper>,
+                        true
+                      );
                     }}
                     ariaLabel="Eintrag löschen"
                     variant="svg"
