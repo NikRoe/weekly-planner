@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { TodoList, TodoFromForm, Todo } from "../../../types/todo";
+import { TodoList, Todo } from "../../../types/todo";
 import styles from "./Column.module.css";
-import Modal from "../Modal/Modal";
 import Form from "../Form/Form";
 import { useDroppable } from "@dnd-kit/core";
 import SortableItem from "../SortableItem/SortableItem";
@@ -13,7 +11,8 @@ import {
   handleEditTodo as onEditTodo,
 } from "@/services/todos";
 import { clipString } from "@/utils/clip";
-import { createPortal } from "react-dom";
+import { useModal } from "@/provider/ModalProvider";
+import Button from "../Button/Button";
 
 interface ColumnProps {
   name: string;
@@ -22,19 +21,10 @@ interface ColumnProps {
 }
 
 export default function Column({ name, todos, isToday }: ColumnProps) {
-  const [todoToEdit, setTodoToEdit] = useState<Todo>();
-  const [isOpen, setIsOpen] = useState(false);
   const { setNodeRef } = useDroppable({
     id: name,
   });
-
-  function handleToggleModal() {
-    setIsOpen(!isOpen);
-  }
-
-  function handleEditTodo(updatedTodo: TodoFromForm) {
-    onEditTodo({ ...(todoToEdit as Todo), ...updatedTodo });
-  }
+  const { openModal, closeModal } = useModal();
 
   function handleUpdateStatus(todoToUpdate: Todo) {
     onEditTodo({
@@ -58,20 +48,30 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
               key={todo.id}
               todo={todo}
               onClick={() => {
-                handleToggleModal();
-                setTodoToEdit(todo);
+                openModal(
+                  <Form
+                    onSubmitTodo={(updatedTodo) => {
+                      onEditTodo({
+                        ...(todo as Todo),
+                        ...updatedTodo,
+                      });
+                      closeModal();
+                    }}
+                    defaultValue={todo}
+                  />
+                );
               }}
             >
               <>
                 <div className={styles.buttonWrapper}>
-                  <button
+                  <Button
                     onClick={(event) => {
-                      event.stopPropagation();
+                      event?.stopPropagation();
                       handleUpdateStatus(todo);
                     }}
                     type="button"
-                    className={styles.button}
-                    aria-label={`Mark as ${
+                    variant="svg"
+                    ariaLabel={`Mark as ${
                       todo.status === "Done" ? "open" : "done"
                     }`}
                     title={`Mark as ${
@@ -79,21 +79,21 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
                     }`}
                   >
                     <DoneIcon status={todo.status} />
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     type="button"
                     onClick={(event) => {
-                      event.stopPropagation();
+                      event?.stopPropagation();
 
                       handleDeleteTodo(todo.id);
                     }}
-                    aria-label="Eintrag löschen"
-                    className={styles.deleteButton}
+                    ariaLabel="Eintrag löschen"
+                    variant="svg"
                     title="Eintrag löschen"
                   >
                     <TrashIcon />
-                  </button>
+                  </Button>
                 </div>
                 <p>
                   {todo.title.length > 25 ? clipString(todo.title) : todo.title}
@@ -103,20 +103,6 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
           ))}
         </SortableContext>
       </ul>
-
-      {isOpen &&
-        createPortal(
-          <Modal onClose={handleToggleModal}>
-            <Form
-              onSubmitTodo={(updatedTodo) => {
-                handleEditTodo(updatedTodo);
-                handleToggleModal();
-              }}
-              defaultValue={todoToEdit}
-            />
-          </Modal>,
-          document.body
-        )}
     </>
   );
 }

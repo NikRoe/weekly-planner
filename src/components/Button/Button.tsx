@@ -3,7 +3,7 @@ import styles from "./Button.module.css";
 
 interface ButtonProps {
   type: "submit" | "button" | "reset";
-  onClick: () => void;
+  onClick: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   title: string;
   children: ReactNode;
   ariaLabel: string;
