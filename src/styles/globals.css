@@ -45,7 +45,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 
 * {
