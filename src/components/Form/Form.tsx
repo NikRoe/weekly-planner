@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Todo } from "../../../types/todo";
+import Button from "../Button/Button";
 
 const todoSchema = z.object({
   title: z.string().min(3, "Der Titel muss mindestens 3 Zeichen lang sein"),
@@ -81,13 +82,9 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         defaultValue={defaultValue?.notes}
         className={styles.textarea}
       ></textarea>
-      <button
-        type="submit"
-        className={styles.button}
-        aria-label="Neues Todo hinzufügen"
-      >
+      <Button type="submit" title="Submit" ariaLabel="Submit" variant="default">
         Submit
-      </button>
+      </Button>
     </form>
   );
 }

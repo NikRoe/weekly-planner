@@ -35,26 +35,6 @@
   min-height: 100px;
 }
 
-.button {
-  align-self: center;
-  padding: 1rem 0.75rem;
-  cursor: pointer;
-
-  font-size: 1rem;
-  background-color: var(--cta-bg);
-  color: var(--cta-text);
-  border: none;
-  border-radius: 14px;
-}
-
-.button:hover {
-  background-color: var(--cta-hover-bg);
-}
-
-.button:active {
-  transform: scale(0.98);
-}
-
 .error {
   font-size: 0.875rem;
   color: var(--color-error);

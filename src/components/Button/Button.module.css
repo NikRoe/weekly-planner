@@ -18,6 +18,10 @@
   transform: scale(0.98);
 }
 
+.button:focus {
+  outline: 0.25em solid;
+}
+
 .svg {
   cursor: pointer;
   background: none;
@@ -37,6 +41,10 @@
 
   background-color: var(--background-error);
   color: var(--color-error);
+}
+
+.danger:focus {
+  outline: 0.25em solid var(--color-error);
 }
 
 .danger:hover {
