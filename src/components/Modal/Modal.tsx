@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef } from "react";
 import styles from "./Modal.module.css";
+import Button from "../Button/Button";
 
 interface ModalProps {
   children: ReactNode;
@@ -80,14 +81,16 @@ export default function Modal({
         aria-modal="true"
       >
         {!hideCloseButton && (
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            aria-label="close"
-            className={styles.button}
+            ariaLabel="close"
+            variant="close"
+            title="close"
+            // className={styles.button}
           >
             X
-          </button>
+          </Button>
         )}
         {children}
       </div>

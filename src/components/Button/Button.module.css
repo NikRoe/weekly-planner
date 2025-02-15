@@ -19,7 +19,7 @@
 }
 
 .button:focus {
-  outline: 0.25em solid;
+  outline: 0.25em solid var(--cta-outline);
 }
 
 .svg {
@@ -49,4 +49,18 @@
 
 .danger:hover {
   background-color: var(--background-error-hover);
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  font-size: xx-large;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-color);
+}
+
+.close:hover {
+  color: var(--cta-bg);
 }

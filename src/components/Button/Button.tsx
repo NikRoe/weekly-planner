@@ -27,6 +27,8 @@ export default function Button({
       ? styles.danger
       : variant === "svg"
       ? styles.svg
+      : variant === "close"
+      ? styles.close
       : "";
   return (
     <button

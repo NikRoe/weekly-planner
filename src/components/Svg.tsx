@@ -1,12 +1,12 @@
 export function DoneIcon({ status }: { status: string }) {
   return (
     <svg
-      fill={status === "Done" ? "#3ac200" : "white"}
+      fill={status === "Done" ? "#3ac200" : "var(--text-color)"}
       width="16px"
       height="16px"
       viewBox="0 -1.5 27 27"
       xmlns="http://www.w3.org/2000/svg"
-      stroke={status === "Done" ? "#3ac200" : "white"}
+      stroke={status === "Done" ? "#3ac200" : "var(--text-color)"}
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
@@ -56,7 +56,7 @@ export function RevertIcon() {
       height="24px"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      fill="#000000"
+      fill="var(--text-color)"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
