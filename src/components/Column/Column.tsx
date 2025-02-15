@@ -14,6 +14,7 @@ import { clipString } from "@/utils/clip";
 import { useModal } from "@/provider/ModalProvider";
 import Button from "../Button/Button";
 import Wrapper from "../Wrapper/Wrapper";
+import { useEffect, useRef } from "react";
 
 interface ColumnProps {
   name: string;
@@ -26,6 +27,8 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
     id: name,
   });
   const { openModal, closeModal } = useModal();
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const needsScrollbar = useRef(false);
 
   function handleUpdateStatus(todoToUpdate: Todo) {
     onEditTodo({
@@ -34,11 +37,27 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
     });
   }
 
+  useEffect(() => {
+    const headingHeight = 45;
+    const elementHeight = 80;
+    const gap = 16;
+
+    const wrapperHeight = wrapperRef?.current?.offsetHeight;
+    if (!wrapperHeight) return;
+    if (
+      wrapperHeight -
+        (headingHeight + gap + todos.length * (elementHeight + gap)) <
+      100
+    ) {
+      needsScrollbar.current = true;
+    }
+  }, [todos.length]);
+
   return (
-    <>
+    <div ref={wrapperRef}>
       <ul
         className={`${styles.list} ${isToday ? styles.isToday : ""} ${
-          todos.length > 4 ? styles.overflowY : ""
+          needsScrollbar ? styles.overflowY : ""
         }`}
         ref={setNodeRef}
       >
@@ -128,6 +147,6 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
           ))}
         </SortableContext>
       </ul>
-    </>
+    </div>
   );
 }
