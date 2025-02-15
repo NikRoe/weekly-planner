@@ -32,12 +32,22 @@ export default function SortableItem({
     transition,
   };
 
+  function handleKeyDown(event: React.KeyboardEvent<HTMLLIElement>) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (onClick) {
+        onClick();
+      }
+    }
+  }
+
   return (
     <li
       onClick={onClick}
       className={`${styles.card} ${isOverlay ? styles.boxShadow : ""}`}
       ref={setNodeRef}
       style={style}
+      onKeyDown={handleKeyDown}
       {...attributes}
       {...listeners}
     >
