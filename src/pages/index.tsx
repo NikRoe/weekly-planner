@@ -80,7 +80,6 @@ export default function Home() {
   }
 
   function handleDragStart(event: DragStartEvent) {
-    console.log("gestartet");
     setActiveId(event.active.id as string);
   }
 
