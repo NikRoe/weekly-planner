@@ -8,7 +8,7 @@ import {
   DragOverlay,
   DragStartEvent,
   DragEndEvent,
-  MouseSensor,
+  PointerSensor,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
@@ -29,14 +29,14 @@ export default function Home() {
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const mouseSensor = useSensor(MouseSensor, {
+  const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
       delay: 75,
       tolerance: 5,
     },
   });
 
-  const sensors = useSensors(mouseSensor);
+  const sensors = useSensors(pointerSensor);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
@@ -80,6 +80,7 @@ export default function Home() {
   }
 
   function handleDragStart(event: DragStartEvent) {
+    console.log("gestartet");
     setActiveId(event.active.id as string);
   }
 
