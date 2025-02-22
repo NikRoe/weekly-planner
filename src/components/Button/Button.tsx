@@ -29,6 +29,8 @@ export default function Button({
       ? styles.svg
       : variant === "close"
       ? styles.close
+      : variant === "text"
+      ? styles.text
       : "";
   return (
     <button

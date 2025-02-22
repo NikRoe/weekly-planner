@@ -5,10 +5,10 @@ import {
   closestCorners,
   useSensor,
   useSensors,
-  PointerSensor,
   DragOverlay,
   DragStartEvent,
   DragEndEvent,
+  MouseSensor,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
@@ -29,14 +29,14 @@ export default function Home() {
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const pointerSensor = useSensor(PointerSensor, {
+  const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
-      delay: 100,
+      delay: 75,
       tolerance: 5,
     },
   });
 
-  const sensors = useSensors(pointerSensor);
+  const sensors = useSensors(mouseSensor);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;

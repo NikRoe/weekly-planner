@@ -7,7 +7,6 @@ import { ReactNode } from "react";
 interface SortableItemProps {
   todo?: Todo;
   children?: ReactNode;
-  onClick?: () => void;
   isOverlay?: boolean;
 }
 
@@ -21,7 +20,6 @@ const defaultTodo = {
 export default function SortableItem({
   todo = defaultTodo,
   children,
-  onClick,
   isOverlay = false,
 }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -32,22 +30,11 @@ export default function SortableItem({
     transition,
   };
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLLIElement>) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (onClick) {
-        onClick();
-      }
-    }
-  }
-
   return (
     <li
-      onClick={onClick}
       className={`${styles.card} ${isOverlay ? styles.boxShadow : ""}`}
       ref={setNodeRef}
       style={style}
-      onKeyDown={handleKeyDown}
       {...attributes}
       {...listeners}
     >

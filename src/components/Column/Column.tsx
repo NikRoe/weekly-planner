@@ -64,24 +64,7 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
         <h2 className={styles.title}>{name}</h2>
         <SortableContext items={todos.map((todo) => todo.id)}>
           {todos.toSorted(sortByStatus).map((todo) => (
-            <SortableItem
-              key={todo.id}
-              todo={todo}
-              onClick={() => {
-                openModal(
-                  <Form
-                    onSubmitTodo={(updatedTodo) => {
-                      onEditTodo({
-                        ...todo,
-                        ...updatedTodo,
-                      });
-                      closeModal();
-                    }}
-                    defaultValue={todo}
-                  />
-                );
-              }}
-            >
+            <SortableItem key={todo.id} todo={todo}>
               <>
                 <div className={styles.buttonWrapper}>
                   <Button
@@ -139,9 +122,33 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
                     <TrashIcon />
                   </Button>
                 </div>
-                <p>
+                <Button
+                  type="button"
+                  variant="text"
+                  title={
+                    todo.title.length > 25 ? clipString(todo.title) : todo.title
+                  }
+                  ariaLabel={
+                    todo.title.length > 25 ? clipString(todo.title) : todo.title
+                  }
+                  onClick={(event) => {
+                    event?.stopPropagation();
+                    openModal(
+                      <Form
+                        onSubmitTodo={(updatedTodo) => {
+                          onEditTodo({
+                            ...todo,
+                            ...updatedTodo,
+                          });
+                          closeModal();
+                        }}
+                        defaultValue={todo}
+                      />
+                    );
+                  }}
+                >
                   {todo.title.length > 25 ? clipString(todo.title) : todo.title}
-                </p>
+                </Button>
               </>
             </SortableItem>
           ))}
