@@ -1,19 +1,11 @@
-import { TodoList, Todo } from "../../../types/todo";
+import { TodoList } from "../../../types/todo";
 import styles from "./Column.module.css";
-import Form from "../Form/Form";
+
 import { useDroppable } from "@dnd-kit/core";
 import SortableItem from "../SortableItem/SortableItem";
 import { SortableContext } from "@dnd-kit/sortable";
 import { sortByStatus } from "@/utils/sort";
-import { DoneIcon, TrashIcon } from "../Svg";
-import {
-  handleDeleteTodo,
-  handleEditTodo as onEditTodo,
-} from "@/services/todos";
-import { clipString } from "@/utils/clip";
-import { useModal } from "@/provider/ModalProvider";
-import Button from "../Button/Button";
-import Wrapper from "../Wrapper/Wrapper";
+
 import { useEffect, useRef } from "react";
 
 interface ColumnProps {
@@ -26,16 +18,9 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
   const { setNodeRef } = useDroppable({
     id: name,
   });
-  const { openModal, closeModal } = useModal();
+
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const needsScrollbar = useRef(false);
-
-  function handleUpdateStatus(todoToUpdate: Todo) {
-    onEditTodo({
-      ...todoToUpdate,
-      status: todoToUpdate.status === "Done" ? "Open" : "Done",
-    });
-  }
 
   useEffect(() => {
     const headingHeight = 45;
@@ -64,93 +49,7 @@ export default function Column({ name, todos, isToday }: ColumnProps) {
         <h2 className={styles.title}>{name}</h2>
         <SortableContext items={todos.map((todo) => todo.id)}>
           {todos.toSorted(sortByStatus).map((todo) => (
-            <SortableItem key={todo.id} todo={todo}>
-              <>
-                <div className={styles.buttonWrapper}>
-                  <Button
-                    onClick={(event) => {
-                      event?.stopPropagation();
-                      handleUpdateStatus(todo);
-                    }}
-                    type="button"
-                    variant="svg"
-                    ariaLabel={`Mark as ${
-                      todo.status === "Done" ? "open" : "done"
-                    }`}
-                    title={`Mark as ${
-                      todo.status === "Done" ? "open" : "done"
-                    }`}
-                  >
-                    <DoneIcon status={todo.status} />
-                  </Button>
-
-                  <Button
-                    type="button"
-                    onClick={(event) => {
-                      event?.stopPropagation();
-                      openModal(
-                        <Wrapper>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              handleDeleteTodo(todo.id);
-                              closeModal();
-                            }}
-                            ariaLabel="Todo löschen"
-                            title="Todo löschen"
-                            variant="danger"
-                          >
-                            Todo wirklich löschen?
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={closeModal}
-                            ariaLabel="Abbrechen"
-                            title="Abbrechen"
-                            variant="default"
-                          >
-                            Abbrechen
-                          </Button>
-                        </Wrapper>,
-                        true
-                      );
-                    }}
-                    ariaLabel="Eintrag löschen"
-                    variant="svg"
-                    title="Eintrag löschen"
-                  >
-                    <TrashIcon />
-                  </Button>
-                </div>
-                <Button
-                  type="button"
-                  variant="text"
-                  title={
-                    todo.title.length > 25 ? clipString(todo.title) : todo.title
-                  }
-                  ariaLabel={
-                    todo.title.length > 25 ? clipString(todo.title) : todo.title
-                  }
-                  onClick={(event) => {
-                    event?.stopPropagation();
-                    openModal(
-                      <Form
-                        onSubmitTodo={(updatedTodo) => {
-                          onEditTodo({
-                            ...todo,
-                            ...updatedTodo,
-                          });
-                          closeModal();
-                        }}
-                        defaultValue={todo}
-                      />
-                    );
-                  }}
-                >
-                  {todo.title.length > 25 ? clipString(todo.title) : todo.title}
-                </Button>
-              </>
-            </SortableItem>
+            <SortableItem key={todo.id} todo={todo} />
           ))}
         </SortableContext>
       </ul>

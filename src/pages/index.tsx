@@ -3,12 +3,9 @@ import Column from "@/components/Column/Column";
 import {
   DndContext,
   closestCorners,
-  useSensor,
-  useSensors,
   DragOverlay,
   DragStartEvent,
   DragEndEvent,
-  PointerSensor,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
 import useSWR from "swr";
@@ -28,15 +25,6 @@ export default function Home() {
   } = useSWR<TodoList>("/api/todos");
 
   const [activeId, setActiveId] = useState<string | null>(null);
-
-  const pointerSensor = useSensor(PointerSensor, {
-    activationConstraint: {
-      delay: 75,
-      tolerance: 5,
-    },
-  });
-
-  const sensors = useSensors(pointerSensor);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
@@ -92,7 +80,6 @@ export default function Home() {
           collisionDetection={closestCorners}
           onDragEnd={optimisticHandleDragEnd}
           onDragStart={handleDragStart}
-          sensors={sensors}
         >
           <ColumnWrapper>
             <>
@@ -117,9 +104,7 @@ export default function Home() {
                   <SortableItem
                     todo={todos.find((todo) => todo.id === activeId)}
                     isOverlay
-                  >
-                    <p>{todos.find((todo) => todo.id === activeId)?.title}</p>
-                  </SortableItem>
+                  />
                 )}
               </DragOverlay>
             </>
