@@ -1,26 +1,9 @@
 import styles from "./Form.module.css";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Todo } from "../../../types/todo";
 import Button from "../Button/Button";
-
-const todoSchema = z.object({
-  title: z.string().min(3, "Der Titel muss mindestens 3 Zeichen lang sein"),
-  column: z.enum([
-    "Backlog",
-    "Montag",
-    "Dienstag",
-    "Mittwoch",
-    "Donnerstag",
-    "Freitag",
-    "Samstag",
-    "Sonntag",
-  ]),
-  notes: z.string().optional(),
-});
-
-type TodoFromForm = z.infer<typeof todoSchema>;
+import { todoSchema, type TodoFromForm } from "../../lib/todoSchema";
 
 interface FormProps {
   onSubmitTodo: (newTodo: TodoFromForm) => void;
