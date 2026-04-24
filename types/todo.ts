@@ -3,9 +3,9 @@ export type Todo = {
   title: string;
   column: string;
   status: string;
-  notes?: string | undefined;
+  notes?: string;
+  category?: string;
+  time?: string;
 };
-
-export type TodoFromForm = Omit<Todo, "id" | "status">;
 
 export type TodoList = Todo[];

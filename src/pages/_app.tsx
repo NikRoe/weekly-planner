@@ -2,6 +2,26 @@ import { ModalProvider } from "@/provider/ModalProvider";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig, Fetcher } from "swr";
+import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+});
 
 const fetcher: Fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -21,11 +41,19 @@ const fetcher: Fetcher = async (url: string) => {
   return res.json();
 };
 
+const fontVariables = [
+  instrumentSerif.variable,
+  inter.variable,
+  jetbrainsMono.variable,
+].join(" ");
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig value={{ fetcher }}>
       <ModalProvider>
-        <Component {...pageProps} />
+        <div className={fontVariables}>
+          <Component {...pageProps} />
+        </div>
       </ModalProvider>
     </SWRConfig>
   );

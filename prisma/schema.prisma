@@ -14,9 +14,11 @@ datasource db {
 }
 
 model Todo {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  title  String
-  column String
-  status String
-  notes  String? // Optional
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  column   String
+  status   String
+  notes    String?
+  category String?
+  time     String?
 }

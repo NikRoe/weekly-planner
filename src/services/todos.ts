@@ -1,4 +1,5 @@
-import { Todo, TodoFromForm } from "../../types/todo";
+import { Todo } from "../../types/todo";
+import { TodoFromForm } from "../lib/todoSchema";
 import { mutate } from "swr";
 
 export async function handleAddTodo(newTodo: TodoFromForm) {

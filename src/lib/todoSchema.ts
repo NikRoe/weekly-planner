@@ -13,6 +13,8 @@ export const todoSchema = z.object({
     "Sonntag",
   ]),
   notes: z.string().optional(),
+  category: z.string().optional(),
+  time: z.string().optional(),
 });
 
 export type TodoFromForm = z.infer<typeof todoSchema>;
