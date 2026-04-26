@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import Column from "@/components/Column/Column";
 import {
   DndContext,
@@ -8,13 +8,17 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import { columnNames } from "@/utils/todos";
+import { getWeekData } from "@/utils/week";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
-import ColumnWrapper from "@/components/ColumnWrapper/ColumnWrapper";
+import BoardLayout from "@/components/ColumnWrapper/ColumnWrapper";
 import Header from "@/components/Header/Header";
 import ButtonRow from "@/components/ButtonRow/ButtonRow";
+import styles from "@/styles/Home.module.css";
+
+const DAY_COLUMN_NAMES = columnNames.filter((name) => name !== "Backlog");
 
 export default function Home() {
   const {
@@ -25,6 +29,21 @@ export default function Home() {
   } = useSWR<TodoList>("/api/todos");
 
   const [activeId, setActiveId] = useState<string | null>(null);
+  const weekScrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const { todayIndex } = getWeekData();
+    if (todayIndex < 0) return;
+
+    const id = setTimeout(() => {
+      weekScrollRef.current?.scrollTo({
+        left: todayIndex * 307,
+        behavior: "smooth",
+      });
+    }, 100);
+
+    return () => clearTimeout(id);
+  }, []);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
@@ -71,6 +90,8 @@ export default function Home() {
     setActiveId(event.active.id as string);
   }
 
+  const backlogTodos = todos.filter((todo) => todo.column === "Backlog");
+
   return (
     <>
       <Header />
@@ -81,34 +102,39 @@ export default function Home() {
           onDragEnd={optimisticHandleDragEnd}
           onDragStart={handleDragStart}
         >
-          <ColumnWrapper>
-            <>
-              {columnNames.map((column, index) => {
-                const filteredTodos = todos.filter(
-                  (todo) => todo.column === column
-                );
-                const today = new Date().getDay();
-                const isToday = today === index % 7 && column !== "Backlog";
+          <BoardLayout
+            sidebar={
+              <Column name="Backlog" todos={backlogTodos} isToday={false} />
+            }
+            main={
+              <div className={styles.weekScroll} ref={weekScrollRef}>
+                {DAY_COLUMN_NAMES.map((column, index) => {
+                  const filteredTodos = todos.filter(
+                    (todo) => todo.column === column
+                  );
+                  const today = new Date().getDay();
+                  const isToday = today === index % 7 && column !== "Backlog";
 
-                return (
-                  <Column
-                    key={column}
-                    isToday={isToday}
-                    name={column}
-                    todos={filteredTodos}
-                  />
-                );
-              })}
-              <DragOverlay>
-                {activeId && (
-                  <SortableItem
-                    todo={todos.find((todo) => todo.id === activeId)}
-                    isOverlay
-                  />
-                )}
-              </DragOverlay>
-            </>
-          </ColumnWrapper>
+                  return (
+                    <Column
+                      key={column}
+                      isToday={isToday}
+                      name={column}
+                      todos={filteredTodos}
+                    />
+                  );
+                })}
+                <DragOverlay>
+                  {activeId && (
+                    <SortableItem
+                      todo={todos.find((todo) => todo.id === activeId)}
+                      isOverlay
+                    />
+                  )}
+                </DragOverlay>
+              </div>
+            }
+          />
         </DndContext>
       </main>
     </>

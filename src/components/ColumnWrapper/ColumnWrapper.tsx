@@ -1,22 +1,16 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode } from "react";
 import styles from "./ColumnWrapper.module.css";
 
-export default function ColumnWrapper({ children }: { children: ReactNode }) {
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const id = setTimeout(() => {
-      wrapperRef.current?.scrollTo({
-        left: (new Date().getDay() || 7) * 307,
-        behavior: "smooth",
-      });
-    }, 100);
+interface BoardLayoutProps {
+  sidebar: ReactNode;
+  main: ReactNode;
+}
 
-    return () => clearTimeout(id);
-  }, []);
-
+export default function BoardLayout({ sidebar, main }: BoardLayoutProps) {
   return (
-    <div className={styles.columnWrapper} ref={wrapperRef}>
-      {children}
+    <div className={styles.board}>
+      {sidebar}
+      {main}
     </div>
   );
 }

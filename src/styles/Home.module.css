@@ -11,3 +11,19 @@
 .button:hover {
   color: var(--cta-bg);
 }
+
+.weekScroll {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(180px, 1fr));
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.weekScroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.weekScroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}

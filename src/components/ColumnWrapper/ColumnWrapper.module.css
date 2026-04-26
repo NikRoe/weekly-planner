@@ -1,8 +1,7 @@
-.columnWrapper {
+.board {
   display: grid;
-  grid-template-columns: repeat(8, minmax(300px, 1fr));
-  gap: 0.5rem;
-  margin: 0 32px;
-  min-height: 75vh;
-  overflow-x: scroll;
+  grid-template-columns: 260px 1fr;
+  overflow: hidden;
+  height: calc(100vh - 140px);
+  min-height: 600px;
 }
