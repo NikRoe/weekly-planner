@@ -36,4 +36,6 @@ export const columnNames = [
   "Freitag",
   "Samstag",
   "Sonntag",
-];
+] as const;
+
+export type ColumnName = (typeof columnNames)[number];

@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Todo } from "../../../types/todo";
-import styles from "../Column/Column.module.css";
+import styles from "./SortableItem.module.css";
 import { useState } from "react";
 import { useModal } from "@/provider/ModalProvider";
 import { DoneIcon, DotsIcon, EditIcon, TrashIcon } from "../Svg";

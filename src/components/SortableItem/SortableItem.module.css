@@ -1,0 +1,22 @@
+.card {
+  padding: 0.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--card);
+  height: 5rem;
+  cursor: grab;
+  width: 100%;
+  font-size: large;
+  list-style-type: none;
+}
+
+.boxShadow {
+  box-shadow: 1px 1px 7px grey, -1px -1px 7px grey, -1px 1px 7px grey,
+    1px -1px 7px grey;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

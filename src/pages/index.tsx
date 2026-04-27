@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import Column from "@/components/Column/Column";
+import DayColumn from "@/components/DayColumn/DayColumn";
 import {
   DndContext,
   closestCorners,
@@ -7,7 +7,7 @@ import {
   DragStartEvent,
   DragEndEvent,
 } from "@dnd-kit/core";
-import { columnNames } from "@/utils/todos";
+import { ColumnName, columnNames } from "@/utils/todos";
 import { getWeekData } from "@/utils/week";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
@@ -34,7 +34,8 @@ export default function Home() {
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
   const weekScrollRef = useRef<HTMLDivElement | null>(null);
 
-  const { weekLabel, weekNumber, weekYear, todayIndex } = getWeekData(weekOffset);
+  const { weekDates, weekLabel, weekNumber, weekYear, todayIndex } =
+    getWeekData(weekOffset);
 
   useEffect(() => {
     if (todayIndex < 0) return;
@@ -60,7 +61,7 @@ export default function Home() {
     if (!over || !todos) return;
 
     const filteredCollisions = collisions?.filter((collision) =>
-      columnNames.includes(collision.id as string),
+      columnNames.includes(collision.id as ColumnName),
     );
 
     if (!filteredCollisions?.length) return;
@@ -130,11 +131,12 @@ export default function Home() {
                   const isToday = index === todayIndex;
 
                   return (
-                    <Column
+                    <DayColumn
                       key={column}
-                      isToday={isToday}
                       name={column}
+                      dateNumber={weekDates[index]}
                       todos={filteredTodos}
+                      isToday={isToday}
                     />
                   );
                 })}
