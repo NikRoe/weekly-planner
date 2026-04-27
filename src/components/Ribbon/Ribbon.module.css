@@ -1,0 +1,102 @@
+.ribbon {
+  display: flex;
+  align-items: center;
+  gap: var(--s-8);
+  padding: var(--s-4) var(--s-8);
+  border-bottom: 1px solid var(--divider);
+  background: var(--bg-elevated);
+  font-size: 13px;
+}
+
+/* ── Stat items ── */
+.statItem {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.statNumber {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  min-width: 28px;
+}
+
+.statNumberMuted {
+  color: var(--ink-4);
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+
+/* ── Right side ── */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  margin-left: auto;
+}
+
+/* ── Filter chips ── */
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.filterChip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filterChip:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+.filterChipActive {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+.filterChipActive:hover {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+}
+
+/* ── Progress ── */
+.progressBar {
+  width: 280px;
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progressPercentage {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-2);
+  min-width: 42px;
+  text-align: right;
+}

@@ -15,6 +15,7 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import BoardLayout from "@/components/ColumnWrapper/ColumnWrapper";
 import Header from "@/components/Header/Header";
+import Ribbon, { ActiveFilter } from "@/components/Ribbon/Ribbon";
 import styles from "@/styles/Home.module.css";
 
 const DAY_COLUMN_NAMES = columnNames.filter((name) => name !== "Backlog");
@@ -29,6 +30,7 @@ export default function Home() {
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
   const weekScrollRef = useRef<HTMLDivElement | null>(null);
 
   const { weekLabel, weekNumber, weekYear, todayIndex } = getWeekData(weekOffset);
@@ -92,6 +94,7 @@ export default function Home() {
   }
 
   const backlogTodos = todos.filter((todo) => todo.column === "Backlog");
+  const todayColumnName = todayIndex >= 0 ? DAY_COLUMN_NAMES[todayIndex] : null;
 
   return (
     <>
@@ -104,6 +107,12 @@ export default function Home() {
         onTodayClick={() => setWeekOffset(0)}
       />
       <main>
+        <Ribbon
+          todos={todos}
+          todayColumnName={todayColumnName}
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={optimisticHandleDragEnd}
