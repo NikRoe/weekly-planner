@@ -15,7 +15,6 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import BoardLayout from "@/components/ColumnWrapper/ColumnWrapper";
 import Header from "@/components/Header/Header";
-import ButtonRow from "@/components/ButtonRow/ButtonRow";
 import styles from "@/styles/Home.module.css";
 
 const DAY_COLUMN_NAMES = columnNames.filter((name) => name !== "Backlog");
@@ -29,10 +28,12 @@ export default function Home() {
   } = useSWR<TodoList>("/api/todos");
 
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [weekOffset, setWeekOffset] = useState(0);
   const weekScrollRef = useRef<HTMLDivElement | null>(null);
 
+  const { weekLabel, weekNumber, weekYear, todayIndex } = getWeekData(weekOffset);
+
   useEffect(() => {
-    const { todayIndex } = getWeekData();
     if (todayIndex < 0) return;
 
     const id = setTimeout(() => {
@@ -43,7 +44,7 @@ export default function Home() {
     }, 100);
 
     return () => clearTimeout(id);
-  }, []);
+  }, [todayIndex]);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <div>An Error Occurred</div>;
@@ -56,7 +57,7 @@ export default function Home() {
     if (!over || !todos) return;
 
     const filteredCollisions = collisions?.filter((collision) =>
-      columnNames.includes(collision.id as string)
+      columnNames.includes(collision.id as string),
     );
 
     if (!filteredCollisions?.length) return;
@@ -64,7 +65,7 @@ export default function Home() {
     const activeId = active.id;
     const newColumn = filteredCollisions[0].id as string;
     const optimisticTodos = todos?.map((todo) =>
-      todo.id === activeId ? { ...todo, column: newColumn } : todo
+      todo.id === activeId ? { ...todo, column: newColumn } : todo,
     );
 
     mutate(
@@ -82,7 +83,7 @@ export default function Home() {
         populateCache: true,
         revalidate: false,
         rollbackOnError: true,
-      }
+      },
     );
   }
 
@@ -94,9 +95,15 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      <Header
+        weekNumber={weekNumber}
+        weekYear={weekYear}
+        weekLabel={weekLabel}
+        onPreviousWeek={() => setWeekOffset((offset) => offset - 1)}
+        onNextWeek={() => setWeekOffset((offset) => offset + 1)}
+        onTodayClick={() => setWeekOffset(0)}
+      />
       <main>
-        <ButtonRow todos={todos} />
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={optimisticHandleDragEnd}
@@ -110,10 +117,9 @@ export default function Home() {
               <div className={styles.weekScroll} ref={weekScrollRef}>
                 {DAY_COLUMN_NAMES.map((column, index) => {
                   const filteredTodos = todos.filter(
-                    (todo) => todo.column === column
+                    (todo) => todo.column === column,
                   );
-                  const today = new Date().getDay();
-                  const isToday = today === index % 7 && column !== "Backlog";
+                  const isToday = index === todayIndex;
 
                   return (
                     <Column

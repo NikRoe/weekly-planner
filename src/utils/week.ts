@@ -40,6 +40,7 @@ export interface WeekData {
   weekDates: number[];
   weekLabel: string;
   weekNumber: number;
+  weekYear: number; // ISO week year — year of the Thursday of the week, may differ from calendar year at year boundaries
   todayIndex: number; // 0 = Monday … 6 = Sunday, -1 if today is not in the displayed week
 }
 
@@ -56,11 +57,15 @@ export function getWeekData(offset: number = 0): WeekData {
     return day;
   });
 
+  const thursday = new Date(monday);
+  thursday.setDate(monday.getDate() + 3);
+
   const weekDates = daysOfWeek.map((day) => day.getDate());
   const weekLabel = buildWeekLabel(daysOfWeek[0], daysOfWeek[6]);
   const weekNumber = getISOWeekNumber(monday);
+  const weekYear = thursday.getFullYear();
   const todayTime = today.getTime();
   const todayIndex = daysOfWeek.findIndex((day) => day.getTime() === todayTime);
 
-  return { weekDates, weekLabel, weekNumber, todayIndex };
+  return { weekDates, weekLabel, weekNumber, weekYear, todayIndex };
 }
