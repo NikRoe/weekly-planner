@@ -1,36 +1,47 @@
+import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Todo } from "../../../types/todo";
-import styles from "./SortableItem.module.css";
-import { useState } from "react";
 import { useModal } from "@/provider/ModalProvider";
-import { DoneIcon, DotsIcon, EditIcon, TrashIcon } from "../Svg";
-import {
-  handleDeleteTodo,
-  handleEditTodo as onEditTodo,
-} from "@/services/todos";
-import { clipString } from "@/utils/clip";
+import { DotsIcon, EditIcon } from "../Svg";
+import { CheckIcon, ClockIcon, TrashIcon } from "@/components/Icons";
+import { handleDeleteTodo, handleEditTodo } from "@/services/todos";
 import Button from "../Button/Button";
 import Wrapper from "../Wrapper/Wrapper";
 import Form from "../Form/Form";
+import styles from "./SortableItem.module.css";
+
+const CATEGORY_LABELS: Record<string, string> = {
+  work: "Arbeit",
+  personal: "Persönlich",
+  errand: "Besorgung",
+  focus: "Fokus",
+};
+
+const CATEGORY_TAG_CLASSES: Record<string, string | undefined> = {
+  work: styles.tagWork,
+  personal: styles.tagPersonal,
+  errand: styles.tagErrand,
+  focus: styles.tagFocus,
+};
 
 interface SortableItemProps {
   todo?: Todo;
   isOverlay?: boolean;
 }
 
-const defaultTodo = {
-  id: "12",
-  title: "Briefe",
-  column: "Donnerstag",
-  status: "Done",
+const defaultTodo: Todo = {
+  id: "default",
+  title: "Aufgabe",
+  column: "Backlog",
+  status: "Open",
 };
 
 export default function SortableItem({
   todo = defaultTodo,
   isOverlay = false,
 }: SortableItemProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openModal, closeModal } = useModal();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todo.id });
@@ -41,136 +52,157 @@ export default function SortableItem({
     touchAction: "none",
   };
 
-  function handleUpdateStatus(todoToUpdate: Todo) {
-    onEditTodo({
-      ...todoToUpdate,
-      status: todoToUpdate.status === "Done" ? "Open" : "Done",
-    });
+  const isDone = todo.status === "Done";
+
+  function handleToggleStatus(event: React.MouseEvent) {
+    event.stopPropagation();
+    handleEditTodo({ ...todo, status: isDone ? "Open" : "Done" });
+  }
+
+  function handleEditClick(event: React.MouseEvent) {
+    event.stopPropagation();
+    setIsMenuOpen(false);
+    openModal(
+      <Form
+        onSubmitTodo={(updatedTodo) => {
+          handleEditTodo({ ...todo, ...updatedTodo });
+          closeModal();
+        }}
+        defaultValue={todo}
+      />
+    );
+  }
+
+  function handleDeleteClick(event: React.MouseEvent) {
+    event.stopPropagation();
+    openModal(
+      <Wrapper>
+        <Button
+          type="button"
+          onClick={() => {
+            handleDeleteTodo(todo.id);
+            closeModal();
+          }}
+          ariaLabel="Todo löschen"
+          title="Todo löschen"
+          variant="danger"
+        >
+          Todo wirklich löschen?
+        </Button>
+        <Button
+          type="button"
+          onClick={closeModal}
+          ariaLabel="Abbrechen"
+          title="Abbrechen"
+          variant="default"
+        >
+          Abbrechen
+        </Button>
+      </Wrapper>,
+      true
+    );
   }
 
   function handlePointerDown(event: React.PointerEvent) {
     const target = event.target as HTMLElement;
-
     if (target.closest("[data-dnd-disabled]")) {
       event.stopPropagation();
       return;
     }
-
     listeners?.onPointerDown?.(event);
   }
 
+  const cardClass = [
+    styles.card,
+    isDone ? styles.cardDone : "",
+    isOverlay ? styles.cardOverlay : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const titleClass = [styles.taskTitle, isDone ? styles.taskTitleDone : ""]
+    .filter(Boolean)
+    .join(" ");
+
+  const checkboxClass = [styles.checkbox, isDone ? styles.checkboxDone : ""]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <li
-      className={`${styles.card} ${isOverlay ? styles.boxShadow : ""}`}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-    >
+    <li className={cardClass} ref={setNodeRef} style={style} {...attributes}>
       <div {...listeners} onPointerDown={handlePointerDown}>
-        <>
-          <div className={styles.buttonWrapper}>
-            <Button
-              onClick={(event) => {
-                event?.stopPropagation();
-                handleUpdateStatus(todo);
-              }}
-              type="button"
-              variant="svg"
-              ariaLabel={`Als ${
-                todo.status === "Done" ? "offen" : "erledigt"
-              } markieren`}
-              title={`Als ${
-                todo.status === "Done" ? "offen" : "erledigt"
-              } markieren`}
-            >
-              <DoneIcon status={todo.status} />
-            </Button>
+        <div className={styles.taskRow}>
+          <button
+            type="button"
+            className={checkboxClass}
+            onClick={handleToggleStatus}
+            aria-label={isDone ? "Als offen markieren" : "Als erledigt markieren"}
+            aria-pressed={isDone}
+            data-dnd-disabled
+          >
+            {isDone && <CheckIcon />}
+          </button>
 
-            <span style={{ display: "flex", gap: "0.25rem" }}>
-              {isOpen && (
-                <>
-                  <Button
-                    type="button"
-                    variant="svg"
-                    title="Bearbeiten"
-                    ariaLabel="Bearbeiten"
-                    onClick={(event) => {
-                      event?.stopPropagation();
-                      openModal(
-                        <Form
-                          onSubmitTodo={(updatedTodo) => {
-                            onEditTodo({
-                              ...todo,
-                              ...updatedTodo,
-                            });
-                            closeModal();
-                            setIsOpen(false);
-                          }}
-                          defaultValue={todo}
-                        />
-                      );
-                    }}
+          <div className={styles.taskBody}>
+            <p className={titleClass}>{todo.title}</p>
+            {todo.notes && (
+              <p className={styles.taskNotes}>{todo.notes}</p>
+            )}
+            {(todo.category || todo.time) && (
+              <div className={styles.taskFooter}>
+                {todo.category && (
+                  <span
+                    className={`${styles.tag} ${CATEGORY_TAG_CLASSES[todo.category] ?? ""}`}
                   >
-                    <EditIcon />
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={(event) => {
-                      event?.stopPropagation();
-                      openModal(
-                        <Wrapper>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              handleDeleteTodo(todo.id);
-                              closeModal();
-                              setIsOpen(false);
-                            }}
-                            ariaLabel="Todo löschen"
-                            title="Todo löschen"
-                            variant="danger"
-                          >
-                            Todo wirklich löschen?
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={closeModal}
-                            ariaLabel="Abbrechen"
-                            title="Abbrechen"
-                            variant="default"
-                          >
-                            Abbrechen
-                          </Button>
-                        </Wrapper>,
-                        true
-                      );
-                    }}
-                    ariaLabel="Eintrag löschen"
-                    variant="svg"
-                    title="Eintrag löschen"
-                  >
-                    <TrashIcon />
-                  </Button>
-                </>
-              )}
-              <Button
-                data-dnd-disabled="true"
-                type="button"
-                onClick={(event) => {
-                  event?.stopPropagation();
-                  setIsOpen(!isOpen);
-                }}
-                ariaLabel={`Optionen ${isOpen ? "schließen" : "öffnen"}`}
-                title={`Optionen ${isOpen ? "schließen" : "öffnen"}`}
-                variant="svg"
-              >
-                <DotsIcon data-dnd-disabled="true" />
-              </Button>
-            </span>
+                    {CATEGORY_LABELS[todo.category] ?? todo.category}
+                  </span>
+                )}
+                {todo.time && (
+                  <span className={styles.taskTime}>
+                    <ClockIcon />
+                    {todo.time}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
+        </div>
 
-          {todo.title.length > 25 ? clipString(todo.title) : todo.title}
-        </>
+        <div className={styles.taskMenuArea} data-dnd-disabled>
+          {isMenuOpen && (
+            <button
+              type="button"
+              className={styles.taskMenuButton}
+              onClick={handleEditClick}
+              aria-label="Bearbeiten"
+              data-dnd-disabled
+            >
+              <EditIcon />
+            </button>
+          )}
+          <button
+            type="button"
+            className={styles.taskMenuButton}
+            onClick={handleDeleteClick}
+            aria-label="Löschen"
+            data-dnd-disabled
+          >
+            <TrashIcon />
+          </button>
+          <button
+            type="button"
+            className={styles.taskMenuButton}
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            aria-label={isMenuOpen ? "Menü schließen" : "Optionen öffnen"}
+            aria-expanded={isMenuOpen}
+            data-dnd-disabled
+          >
+            <DotsIcon />
+          </button>
+        </div>
       </div>
     </li>
   );
