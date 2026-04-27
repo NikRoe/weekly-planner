@@ -1,0 +1,127 @@
+.backlog {
+  border-right: 1px solid var(--divider);
+  background: var(--bg-sunken);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.backlogHeader {
+  padding: var(--s-5) var(--s-5) var(--s-3);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.backlogTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.backlogCount {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  background: var(--surface);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.backlogHint {
+  padding: 0 var(--s-5) var(--s-4);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink-3);
+}
+
+/* ── Task list ── */
+.backlogList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--s-4) var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+}
+
+.backlogList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.backlogList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.emptyState {
+  padding: var(--s-6) var(--s-3);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-4);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Composer ── */
+.composer {
+  padding: var(--s-3) var(--s-4);
+  border-top: 1px solid var(--divider);
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.composerForm {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex: 1;
+}
+
+.composerInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.composerInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.composerInput::placeholder {
+  color: var(--ink-4);
+}
+
+.composerHint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}

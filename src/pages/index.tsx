@@ -14,6 +14,7 @@ import { TodoList } from "../../types/todo";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import BoardLayout from "@/components/ColumnWrapper/ColumnWrapper";
+import Backlog from "@/components/Backlog/Backlog";
 import Header from "@/components/Header/Header";
 import Ribbon, { ActiveFilter } from "@/components/Ribbon/Ribbon";
 import styles from "@/styles/Home.module.css";
@@ -119,9 +120,7 @@ export default function Home() {
           onDragStart={handleDragStart}
         >
           <BoardLayout
-            sidebar={
-              <Column name="Backlog" todos={backlogTodos} isToday={false} />
-            }
+            sidebar={<Backlog todos={backlogTodos} />}
             main={
               <div className={styles.weekScroll} ref={weekScrollRef}>
                 {DAY_COLUMN_NAMES.map((column, index) => {
