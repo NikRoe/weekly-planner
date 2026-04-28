@@ -76,7 +76,9 @@
   align-items: center;
   justify-content: center;
   color: var(--ink-2);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .weekNavButton:hover {
@@ -102,7 +104,9 @@
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   color: var(--ink-2);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .todayChip:hover {
@@ -132,7 +136,9 @@
   color: var(--ink);
   font-size: 13px;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .searchInput:focus {
@@ -175,7 +181,10 @@
   justify-content: center;
   color: var(--ink-2);
   border: 1px solid transparent;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .iconButton:hover {
@@ -205,7 +214,9 @@
   align-items: center;
   justify-content: center;
   color: var(--ink-3);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .themeButtonActive {
@@ -223,7 +234,9 @@
   align-items: center;
   justify-content: center;
   color: var(--ink-2);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
   margin-left: auto;
 }
 
@@ -262,7 +275,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .topbarCenter,
   .topbarRight {
     display: none;
@@ -273,7 +286,7 @@
   }
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1001px) {
   .mobileMenu {
     display: none;
   }
