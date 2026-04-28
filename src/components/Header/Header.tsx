@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useModal } from "@/provider/ModalProvider";
 import Form from "@/components/Form/Form";
@@ -5,11 +6,13 @@ import { handleAddTodo } from "@/services/todos";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  GearIcon,
   SunIcon,
   MoonIcon,
   SearchIcon,
   PlusIcon,
 } from "@/components/Icons";
+import SettingsPanel from "@/components/SettingsPanel/SettingsPanel";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -35,6 +38,8 @@ export default function Header({
 }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const { openModal, closeModal } = useModal();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const gearButtonRef = useRef<HTMLButtonElement | null>(null);
 
   function handleNewTask() {
     openModal(
@@ -130,6 +135,17 @@ export default function Header({
         </div>
 
         <button
+          ref={gearButtonRef}
+          type="button"
+          className={`${styles.iconButton} ${isSettingsOpen ? styles.iconButtonActive : ""}`}
+          onClick={() => setIsSettingsOpen((open) => !open)}
+          aria-label="Einstellungen"
+          aria-expanded={isSettingsOpen}
+        >
+          <GearIcon />
+        </button>
+
+        <button
           type="button"
           className={styles.newTaskButton}
           onClick={handleNewTask}
@@ -138,6 +154,12 @@ export default function Header({
           Neue Aufgabe
         </button>
       </div>
+
+      <SettingsPanel
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        triggerRef={gearButtonRef}
+      />
     </header>
   );
 }

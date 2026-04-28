@@ -8,6 +8,7 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import { ColumnName, columnNames } from "@/utils/todos";
+import { useAppSettings } from "@/provider/AppSettingsProvider";
 import { getWeekData } from "@/utils/week";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
@@ -29,6 +30,7 @@ export default function Home() {
     mutate,
   } = useSWR<TodoList>("/api/todos");
 
+  const { hideWeekends } = useAppSettings();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
@@ -110,6 +112,9 @@ export default function Home() {
 
   const backlogTodos = visibleTodos.filter((todo) => todo.column === "Backlog");
   const todayColumnName = todayIndex >= 0 ? DAY_COLUMN_NAMES[todayIndex] : null;
+  const visibleColumnNames = hideWeekends
+    ? DAY_COLUMN_NAMES.filter((name) => name !== "Samstag" && name !== "Sonntag")
+    : DAY_COLUMN_NAMES;
 
   return (
     <>
@@ -138,8 +143,11 @@ export default function Home() {
           <BoardLayout
             sidebar={<Backlog todos={backlogTodos} />}
             main={
-              <div className={styles.weekScroll} ref={weekScrollRef}>
-                {DAY_COLUMN_NAMES.map((column, index) => {
+              <div
+                className={`${styles.weekScroll} ${hideWeekends ? styles.weekScrollFiveColumns : ""}`}
+                ref={weekScrollRef}
+              >
+                {visibleColumnNames.map((column, index) => {
                   const filteredTodos = visibleTodos.filter(
                     (todo) => todo.column === column,
                   );

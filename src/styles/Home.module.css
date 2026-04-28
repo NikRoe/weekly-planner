@@ -19,6 +19,10 @@
   overflow-y: hidden;
 }
 
+.weekScrollFiveColumns {
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+}
+
 .weekScroll::-webkit-scrollbar {
   height: 8px;
 }

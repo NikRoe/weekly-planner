@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig, Fetcher } from "swr";
 import { ThemeProvider } from "next-themes";
+import { AppSettingsProvider } from "@/provider/AppSettingsProvider";
 import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 
 const instrumentSerif = Instrument_Serif({
@@ -51,13 +52,15 @@ const fontVariables = [
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
-      <SWRConfig value={{ fetcher }}>
-        <ModalProvider>
-          <div className={fontVariables}>
-            <Component {...pageProps} />
-          </div>
-        </ModalProvider>
-      </SWRConfig>
+      <AppSettingsProvider>
+        <SWRConfig value={{ fetcher }}>
+          <ModalProvider>
+            <div className={fontVariables}>
+              <Component {...pageProps} />
+            </div>
+          </ModalProvider>
+        </SWRConfig>
+      </AppSettingsProvider>
     </ThemeProvider>
   );
 }
