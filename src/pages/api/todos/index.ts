@@ -11,10 +11,10 @@ export default async function handler(
   }
 
   if (request.method === "POST") {
-    const { title, column, status, notes } = request.body;
+    const { title, column, status, notes, category, time } = request.body;
 
     const newTodo = await prisma.todo.create({
-      data: { title, column, status, notes },
+      data: { title, column, status, notes, category, time },
     });
 
     return response.status(201).json(newTodo);

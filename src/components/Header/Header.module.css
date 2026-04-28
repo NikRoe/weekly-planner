@@ -214,6 +214,71 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* ── Hamburger (mobile only) ── */
+.hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: background 0.15s ease, color 0.15s ease;
+  margin-left: auto;
+}
+
+.hamburger:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* ── Mobile menu ── */
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border-top: 1px solid var(--divider);
+  background: var(--bg);
+}
+
+.mobileMenuNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.mobileMenuControls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.mobileSearch {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .topbarCenter,
+  .topbarRight {
+    display: none;
+  }
+
+  .hamburger {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 901px) {
+  .mobileMenu {
+    display: none;
+  }
+}
+
 .newTaskButton {
   display: inline-flex;
   align-items: center;

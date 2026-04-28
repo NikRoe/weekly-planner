@@ -34,11 +34,11 @@ export default async function handler(
   }
 
   if (request.method === "PUT") {
-    const { title, column, status, notes } = request.body;
+    const { title, column, status, notes, category, time } = request.body;
 
     await prisma.todo.update({
       where: { id: id as string },
-      data: { title, column, status, notes },
+      data: { title, column, status, notes, category, time },
     });
     return response.status(200).json("Entry updated");
   }
