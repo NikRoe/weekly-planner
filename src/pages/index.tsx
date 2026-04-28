@@ -32,6 +32,7 @@ export default function Home() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const weekScrollRef = useRef<HTMLDivElement | null>(null);
 
   const { weekDates, weekLabel, weekNumber, weekYear, todayIndex } =
@@ -95,7 +96,19 @@ export default function Home() {
     setActiveId(event.active.id as string);
   }
 
-  const backlogTodos = todos.filter((todo) => todo.column === "Backlog");
+  const visibleTodos = todos.filter((todo) => {
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const matchesTitle = todo.title.toLowerCase().includes(query);
+      const matchesNotes = todo.notes?.toLowerCase().includes(query) ?? false;
+      if (!matchesTitle && !matchesNotes) return false;
+    }
+    if (activeFilter === "open" && todo.status === "Done") return false;
+    if (activeFilter === "done" && todo.status !== "Done") return false;
+    return true;
+  });
+
+  const backlogTodos = visibleTodos.filter((todo) => todo.column === "Backlog");
   const todayColumnName = todayIndex >= 0 ? DAY_COLUMN_NAMES[todayIndex] : null;
 
   return (
@@ -107,6 +120,8 @@ export default function Home() {
         onPreviousWeek={() => setWeekOffset((offset) => offset - 1)}
         onNextWeek={() => setWeekOffset((offset) => offset + 1)}
         onTodayClick={() => setWeekOffset(0)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
       <main>
         <Ribbon
@@ -125,7 +140,7 @@ export default function Home() {
             main={
               <div className={styles.weekScroll} ref={weekScrollRef}>
                 {DAY_COLUMN_NAMES.map((column, index) => {
-                  const filteredTodos = todos.filter(
+                  const filteredTodos = visibleTodos.filter(
                     (todo) => todo.column === column,
                   );
                   const isToday = index === todayIndex;

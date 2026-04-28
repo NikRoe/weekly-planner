@@ -19,6 +19,8 @@ interface HeaderProps {
   onPreviousWeek: () => void;
   onNextWeek: () => void;
   onTodayClick: () => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 export default function Header({
@@ -28,6 +30,8 @@ export default function Header({
   onPreviousWeek,
   onNextWeek,
   onTodayClick,
+  searchQuery,
+  onSearchChange,
 }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const { openModal, closeModal } = useModal();
@@ -95,6 +99,8 @@ export default function Header({
             type="search"
             className={styles.searchInput}
             placeholder="Suchen…"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
           />
         </div>
 
