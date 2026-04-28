@@ -57,6 +57,29 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
       {errors.column && (
         <p className={styles.error}>Bitte einen Wochentag auswählen</p>
       )}
+      <label htmlFor="category">Kategorie</label>
+      <select
+        id="category"
+        {...register("category")}
+        defaultValue={defaultValue?.category}
+        className={styles.select}
+      >
+        <option value="">— Keine Kategorie —</option>
+        <option value="work">Arbeit</option>
+        <option value="personal">Persönlich</option>
+        <option value="errand">Besorgung</option>
+        <option value="focus">Fokus</option>
+      </select>
+
+      <label htmlFor="time">Uhrzeit</label>
+      <input
+        id="time"
+        type="time"
+        {...register("time")}
+        defaultValue={defaultValue?.time}
+        className={styles.input}
+      />
+
       <label htmlFor="notes">weitere Notizen</label>
       <textarea
         rows={5}
