@@ -113,11 +113,14 @@ export default function Home() {
   const backlogTodos = visibleTodos.filter((todo) => todo.column === "Backlog");
   const todayColumnName = todayIndex >= 0 ? DAY_COLUMN_NAMES[todayIndex] : null;
   const visibleColumnNames = hideWeekends
-    ? DAY_COLUMN_NAMES.filter((name) => name !== "Samstag" && name !== "Sonntag")
+    ? DAY_COLUMN_NAMES.filter(
+        (name) => name !== "Samstag" && name !== "Sonntag",
+      )
     : DAY_COLUMN_NAMES;
 
   return (
     <>
+      <title>Weekly Planner</title>
       <Header
         weekNumber={weekNumber}
         weekYear={weekYear}
