@@ -40,7 +40,7 @@ export default function Header({
   const { theme, setTheme } = useTheme();
   const { openModal, closeModal } = useModal();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isWeekNavOpen, setIsWeekNavOpen] = useState(true);
   const gearButtonRef = useRef<HTMLButtonElement | null>(null);
 
   function handleNewTask() {
@@ -56,171 +56,114 @@ export default function Header({
 
   const isoWeek = `${weekYear}-W${String(weekNumber).padStart(2, "0")}`;
 
-  const weekNavControls = (
-    <div className={styles.weekNav}>
-      <button
-        type="button"
-        className={styles.weekNavButton}
-        onClick={onPreviousWeek}
-        aria-label="Vorherige Woche"
-      >
-        <ChevronLeftIcon />
-      </button>
-      <time className={styles.weekLabel} dateTime={isoWeek}>
-        {weekLabel}
-      </time>
-      <button
-        type="button"
-        className={styles.weekNavButton}
-        onClick={onNextWeek}
-        aria-label="Nächste Woche"
-      >
-        <ChevronRightIcon />
-      </button>
-    </div>
-  );
-
-  const themeToggle = (
-    <div className={styles.themeToggle} role="group" aria-label="Farbschema">
-      <button
-        type="button"
-        className={`${styles.themeButton} ${theme === "light" ? styles.themeButtonActive : ""}`}
-        onClick={() => setTheme("light")}
-        aria-label="Helles Design"
-        aria-pressed={theme === "light"}
-      >
-        <SunIcon />
-      </button>
-      <button
-        type="button"
-        className={`${styles.themeButton} ${theme === "dark" ? styles.themeButtonActive : ""}`}
-        onClick={() => setTheme("dark")}
-        aria-label="Dunkles Design"
-        aria-pressed={theme === "dark"}
-      >
-        <MoonIcon />
-      </button>
-    </div>
-  );
-
   return (
-    <header>
-      <div className={styles.topbar}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark} aria-hidden="true">W</span>
-          <span className={styles.brandTitle}>Weekly Planner</span>
-          <span className={styles.brandSub}>KW {weekNumber}</span>
+    <header
+      className={`${styles.topbar} ${!isWeekNavOpen ? styles.topbarCollapsed : ""}`}
+    >
+      <div className={styles.brand}>
+        <span className={styles.brandMark} aria-hidden="true">W</span>
+        <span className={styles.brandTitle}>Weekly Planner</span>
+        <span className={styles.brandSub}>KW {weekNumber}</span>
+      </div>
+
+      <nav className={styles.topbarCenter} aria-label="Wochennavigation">
+        <div className={styles.weekNav}>
+          <button
+            type="button"
+            className={styles.weekNavButton}
+            onClick={onPreviousWeek}
+            aria-label="Vorherige Woche"
+          >
+            <ChevronLeftIcon />
+          </button>
+          <time className={styles.weekLabel} dateTime={isoWeek}>
+            {weekLabel}
+          </time>
+          <button
+            type="button"
+            className={styles.weekNavButton}
+            onClick={onNextWeek}
+            aria-label="Nächste Woche"
+          >
+            <ChevronRightIcon />
+          </button>
+        </div>
+        <button
+          type="button"
+          className={styles.todayChip}
+          onClick={onTodayClick}
+        >
+          Heute
+        </button>
+      </nav>
+
+      <div className={styles.topbarRight}>
+        <div role="search" className={styles.search}>
+          <label htmlFor="task-search" className={styles.searchIcon}>
+            <SearchIcon />
+            <span className={styles.visuallyHidden}>Aufgaben suchen</span>
+          </label>
+          <input
+            id="task-search"
+            type="search"
+            className={styles.searchInput}
+            placeholder="Suchen…"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
         </div>
 
-        <nav className={styles.topbarCenter} aria-label="Wochennavigation">
-          {weekNavControls}
+        <div className={styles.themeToggle} role="group" aria-label="Farbschema">
           <button
             type="button"
-            className={styles.todayChip}
-            onClick={onTodayClick}
+            className={`${styles.themeButton} ${theme === "light" ? styles.themeButtonActive : ""}`}
+            onClick={() => setTheme("light")}
+            aria-label="Helles Design"
+            aria-pressed={theme === "light"}
           >
-            Heute
+            <SunIcon />
           </button>
-        </nav>
-
-        <div className={styles.topbarRight}>
-          <div role="search" className={styles.search}>
-            <label htmlFor="task-search" className={styles.searchIcon}>
-              <SearchIcon />
-              <span className={styles.visuallyHidden}>Aufgaben suchen</span>
-            </label>
-            <input
-              id="task-search"
-              type="search"
-              className={styles.searchInput}
-              placeholder="Suchen…"
-              value={searchQuery}
-              onChange={(event) => onSearchChange(event.target.value)}
-            />
-          </div>
-
-          {themeToggle}
-
-          <button
-            ref={gearButtonRef}
-            type="button"
-            className={`${styles.iconButton} ${isSettingsOpen ? styles.iconButtonActive : ""}`}
-            onClick={() => setIsSettingsOpen((open) => !open)}
-            aria-label="Einstellungen"
-            aria-expanded={isSettingsOpen}
-          >
-            <GearIcon />
-          </button>
-
           <button
             type="button"
-            className={styles.newTaskButton}
-            onClick={handleNewTask}
+            className={`${styles.themeButton} ${theme === "dark" ? styles.themeButtonActive : ""}`}
+            onClick={() => setTheme("dark")}
+            aria-label="Dunkles Design"
+            aria-pressed={theme === "dark"}
           >
-            <PlusIcon />
-            Neue Aufgabe
+            <MoonIcon />
           </button>
         </div>
 
         <button
+          ref={gearButtonRef}
+          type="button"
+          className={`${styles.iconButton} ${isSettingsOpen ? styles.iconButtonActive : ""}`}
+          onClick={() => setIsSettingsOpen((open) => !open)}
+          aria-label="Einstellungen"
+          aria-expanded={isSettingsOpen}
+        >
+          <GearIcon />
+        </button>
+
+        <button
+          type="button"
+          className={styles.newTaskButton}
+          onClick={handleNewTask}
+        >
+          <PlusIcon />
+          <span className={styles.newTaskButtonLabel}>Neue Aufgabe</span>
+        </button>
+
+        <button
           type="button"
           className={styles.hamburger}
-          onClick={() => setIsMobileMenuOpen((open) => !open)}
-          aria-label={isMobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
-          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsWeekNavOpen((open) => !open)}
+          aria-label={isWeekNavOpen ? "Wochennavigation ausblenden" : "Wochennavigation anzeigen"}
+          aria-expanded={isWeekNavOpen}
         >
           <HamburgerIcon />
         </button>
       </div>
-
-      {isMobileMenuOpen && (
-        <div className={styles.mobileMenu}>
-          <nav className={styles.mobileMenuNav} aria-label="Wochennavigation">
-            {weekNavControls}
-            <button
-              type="button"
-              className={styles.todayChip}
-              onClick={() => {
-                onTodayClick();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Heute
-            </button>
-          </nav>
-
-          <div className={styles.mobileMenuControls}>
-            <div role="search" className={`${styles.search} ${styles.mobileSearch}`}>
-              <label htmlFor="task-search-mobile" className={styles.searchIcon}>
-                <SearchIcon />
-                <span className={styles.visuallyHidden}>Aufgaben suchen</span>
-              </label>
-              <input
-                id="task-search-mobile"
-                type="search"
-                className={styles.searchInput}
-                placeholder="Suchen…"
-                value={searchQuery}
-                onChange={(event) => onSearchChange(event.target.value)}
-              />
-            </div>
-
-            {themeToggle}
-
-            <button
-              type="button"
-              className={styles.newTaskButton}
-              onClick={() => {
-                handleNewTask();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <PlusIcon />
-              Neue Aufgabe
-            </button>
-          </div>
-        </div>
-      )}
 
       <SettingsPanel
         isOpen={isSettingsOpen}

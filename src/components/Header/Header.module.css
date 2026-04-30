@@ -1,18 +1,20 @@
 .topbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
   padding: var(--s-5) var(--s-8);
   border-bottom: 1px solid var(--divider);
   background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 5;
-  gap: var(--s-6);
+  gap: var(--s-3) var(--s-6);
+  transition: background 0.3s ease;
 }
 
 /* ── Brand ── */
 .brand {
+  flex: none;
   display: flex;
   align-items: baseline;
   gap: var(--s-3);
@@ -55,11 +57,16 @@
   margin-left: var(--s-2);
 }
 
-/* ── Center ── */
+/* ── Center — week navigation ── */
 .topbarCenter {
+  flex: 1 1 300px;
+  min-width: 300px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s-3);
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 }
 
 .weekNav {
@@ -116,9 +123,13 @@
 
 /* ── Right ── */
 .topbarRight {
+  flex: none;
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: var(--s-2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .search {
@@ -225,75 +236,8 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* ── Hamburger (mobile only) ── */
-.hamburger {
-  display: none;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-sm);
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-2);
-  transition:
-    background 0.15s ease,
-    color 0.15s ease;
-  margin-left: auto;
-}
-
-.hamburger:hover {
-  background: var(--surface-hover);
-  color: var(--ink);
-}
-
-/* ── Mobile menu ── */
-.mobileMenu {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-3);
-  padding: var(--s-4) var(--s-5);
-  border-top: 1px solid var(--divider);
-  background: var(--bg);
-}
-
-.mobileMenuNav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-}
-
-.mobileMenuControls {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  flex-wrap: wrap;
-}
-
-.mobileSearch {
-  flex: 1;
-  min-width: 0;
-}
-
-/* ── Responsive ── */
-@media (max-width: 1000px) {
-  .topbarCenter,
-  .topbarRight {
-    display: none;
-  }
-
-  .hamburger {
-    display: inline-flex;
-  }
-}
-
-@media (min-width: 1001px) {
-  .mobileMenu {
-    display: none;
-  }
-}
-
 .newTaskButton {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
   padding: 7px 12px;
@@ -308,4 +252,75 @@
 
 .newTaskButton:hover {
   background: var(--ink-2);
+}
+
+.newTaskButtonLabel {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 120px;
+  transition: max-width 0.3s ease;
+}
+
+/* ── Hamburger — hidden on desktop, visible on mobile ── */
+.hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.hamburger:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+  .topbar {
+    padding: var(--s-4);
+    gap: var(--s-2) var(--s-4);
+  }
+
+  .hamburger {
+    display: inline-flex;
+  }
+
+  /* Week nav wraps to its own row — collapses when hamburger closes it */
+  .topbarCenter {
+    max-height: 60px;
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .topbarCollapsed .topbarCenter {
+    max-height: 0;
+    pointer-events: none;
+  }
+
+  /* Shrink search on mid-size screens */
+  .searchInput {
+    width: 140px;
+  }
+}
+
+@media (max-width: 500px) {
+  /* Collapse CTA text, keep icon */
+  .newTaskButtonLabel {
+    display: none;
+  }
+
+  .newTaskButton {
+    padding: 7px 9px;
+  }
+
+  /* Shrink search further */
+  .searchInput {
+    width: 100px;
+  }
 }
