@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Todo } from "../../../types/todo";
 import { useModal } from "@/provider/ModalProvider";
-import { DotsIcon, EditIcon } from "../Svg";
-import { CheckIcon, ClockIcon, TrashIcon } from "@/components/Icons";
+import { CheckIcon, ClockIcon, PenIcon, TrashIcon } from "@/components/Icons";
 import { handleDeleteTodo, handleEditTodo } from "@/services/todos";
 import Button from "../Button/Button";
 import Wrapper from "../Wrapper/Wrapper";
@@ -41,7 +39,6 @@ export default function SortableItem({
   todo = defaultTodo,
   isOverlay = false,
 }: SortableItemProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openModal, closeModal } = useModal();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: todo.id });
@@ -61,7 +58,6 @@ export default function SortableItem({
 
   function handleEditClick(event: React.MouseEvent) {
     event.stopPropagation();
-    setIsMenuOpen(false);
     openModal(
       <Form
         onSubmitTodo={(updatedTodo) => {
@@ -69,7 +65,7 @@ export default function SortableItem({
           closeModal();
         }}
         defaultValue={todo}
-      />
+      />,
     );
   }
 
@@ -99,7 +95,7 @@ export default function SortableItem({
           Abbrechen
         </Button>
       </Wrapper>,
-      true
+      true,
     );
   }
 
@@ -136,7 +132,9 @@ export default function SortableItem({
             type="button"
             className={checkboxClass}
             onClick={handleToggleStatus}
-            aria-label={isDone ? "Als offen markieren" : "Als erledigt markieren"}
+            aria-label={
+              isDone ? "Als offen markieren" : "Als erledigt markieren"
+            }
             aria-pressed={isDone}
             data-dnd-disabled
           >
@@ -145,9 +143,7 @@ export default function SortableItem({
 
           <div className={styles.taskBody}>
             <p className={titleClass}>{todo.title}</p>
-            {todo.notes && (
-              <p className={styles.taskNotes}>{todo.notes}</p>
-            )}
+            {todo.notes && <p className={styles.taskNotes}>{todo.notes}</p>}
             {(todo.category || todo.time) && (
               <div className={styles.taskFooter}>
                 {todo.category && (
@@ -169,17 +165,16 @@ export default function SortableItem({
         </div>
 
         <div className={styles.taskMenuArea} data-dnd-disabled>
-          {isMenuOpen && (
-            <button
-              type="button"
-              className={styles.taskMenuButton}
-              onClick={handleEditClick}
-              aria-label="Bearbeiten"
-              data-dnd-disabled
-            >
-              <EditIcon />
-            </button>
-          )}
+          <button
+            type="button"
+            className={styles.taskMenuButton}
+            onClick={handleEditClick}
+            aria-label="Bearbeiten"
+            data-dnd-disabled
+          >
+            <PenIcon />
+          </button>
+
           <button
             type="button"
             className={styles.taskMenuButton}
@@ -188,19 +183,6 @@ export default function SortableItem({
             data-dnd-disabled
           >
             <TrashIcon />
-          </button>
-          <button
-            type="button"
-            className={styles.taskMenuButton}
-            onClick={(event) => {
-              event.stopPropagation();
-              setIsMenuOpen(!isMenuOpen);
-            }}
-            aria-label={isMenuOpen ? "Menü schließen" : "Optionen öffnen"}
-            aria-expanded={isMenuOpen}
-            data-dnd-disabled
-          >
-            <DotsIcon />
           </button>
         </div>
       </div>
