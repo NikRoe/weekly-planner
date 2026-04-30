@@ -18,7 +18,7 @@ export default function Modal({
   useEffect(() => {
     function trapFocus(event: KeyboardEvent) {
       const focusableElements = modalRef.current?.querySelectorAll(
-        "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+        "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])",
       );
 
       if (!focusableElements || focusableElements.length === 0) return;
@@ -45,7 +45,7 @@ export default function Modal({
 
   useEffect(() => {
     const focusableElements = modalRef.current?.querySelectorAll(
-      "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])",
     );
 
     if (focusableElements?.length) {
@@ -66,14 +66,7 @@ export default function Modal({
   }, [onClose]);
 
   return (
-    <div
-      className={styles.outerWrapper}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
-    >
+    <div className={styles.outerWrapper}>
       <div
         className={styles.innerWrapper}
         ref={modalRef}
