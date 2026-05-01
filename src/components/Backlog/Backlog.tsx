@@ -19,7 +19,7 @@ export default function Backlog({ todos }: BacklogProps) {
     event.preventDefault();
     const title = composerValue.trim();
     if (!title) return;
-    handleAddTodo({ title, column: "Backlog" });
+    handleAddTodo({ title });
     setComposerValue("");
   }
 

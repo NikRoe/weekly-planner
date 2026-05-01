@@ -31,7 +31,6 @@ interface SortableItemProps {
 const defaultTodo: Todo = {
   id: "default",
   title: "Aufgabe",
-  column: "Backlog",
   status: "Open",
 };
 

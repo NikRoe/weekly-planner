@@ -7,9 +7,9 @@ import {
   DragStartEvent,
   DragEndEvent,
 } from "@dnd-kit/core";
-import { ColumnName, columnNames } from "@/utils/todos";
-import { useAppSettings } from "@/provider/AppSettingsProvider";
+import { DAY_NAMES } from "@/utils/todos";
 import { getWeekData } from "@/utils/week";
+import { useAppSettings } from "@/provider/AppSettingsProvider";
 import useSWR from "swr";
 import { TodoList } from "../../types/todo";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
@@ -19,8 +19,6 @@ import Backlog from "@/components/Backlog/Backlog";
 import Header from "@/components/Header/Header";
 import Ribbon, { ActiveFilter } from "@/components/Ribbon/Ribbon";
 import styles from "@/styles/Home.module.css";
-
-const DAY_COLUMN_NAMES = columnNames.filter((name) => name !== "Backlog");
 
 export default function Home() {
   const {
@@ -37,8 +35,14 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const weekScrollRef = useRef<HTMLDivElement | null>(null);
 
-  const { weekDates, weekLabel, weekNumber, weekYear, todayIndex } =
-    getWeekData(weekOffset);
+  const {
+    weekDates,
+    weekISODates,
+    weekLabel,
+    weekNumber,
+    weekYear,
+    todayIndex,
+  } = getWeekData(weekOffset);
 
   useEffect(() => {
     if (todayIndex < 0) return;
@@ -63,23 +67,28 @@ export default function Home() {
 
     if (!over || !todos) return;
 
+    const validDropTargetIds = new Set(["Backlog", ...weekISODates]);
     const filteredCollisions = collisions?.filter((collision) =>
-      columnNames.includes(collision.id as ColumnName),
+      validDropTargetIds.has(collision.id as string),
     );
 
     if (!filteredCollisions?.length) return;
 
     const activeId = active.id;
-    const newColumn = filteredCollisions[0].id as string;
-    const optimisticTodos = todos?.map((todo) =>
-      todo.id === activeId ? { ...todo, column: newColumn } : todo,
+    const targetId = filteredCollisions[0].id as string;
+    const isBacklog = targetId === "Backlog";
+
+    const optimisticTodos = todos.map((todo) =>
+      todo.id === activeId
+        ? { ...todo, date: isBacklog ? null : targetId }
+        : todo,
     );
 
     mutate(
       async () => {
         await fetch(`/api/todos/${activeId}`, {
           method: "PATCH",
-          body: JSON.stringify({ column: newColumn }),
+          body: JSON.stringify({ date: isBacklog ? null : targetId }),
           headers: { "Content-Type": "application/json" },
         });
 
@@ -110,17 +119,18 @@ export default function Home() {
     return true;
   });
 
-  const backlogTodos = visibleTodos.filter((todo) => todo.column === "Backlog");
-  const todayColumnName = todayIndex >= 0 ? DAY_COLUMN_NAMES[todayIndex] : null;
-  const visibleColumnNames = hideWeekends
-    ? DAY_COLUMN_NAMES.filter(
-        (name) => name !== "Samstag" && name !== "Sonntag",
-      )
-    : DAY_COLUMN_NAMES;
+  const backlogTodos = visibleTodos.filter((todo) => !todo.date);
+  const todayISODate = todayIndex >= 0 ? weekISODates[todayIndex] : null;
+
+  const visibleDays = DAY_NAMES.map((dayName, weekIndex) => ({
+    dayName,
+    isoDate: weekISODates[weekIndex],
+    dateNumber: weekDates[weekIndex],
+    weekIndex,
+  })).filter((_, index) => !hideWeekends || index < 5);
 
   return (
     <>
-      <title>Weekly Planner</title>
       <Header
         weekNumber={weekNumber}
         weekYear={weekYear}
@@ -134,7 +144,7 @@ export default function Home() {
       <main>
         <Ribbon
           todos={todos}
-          todayColumnName={todayColumnName}
+          todayISODate={todayISODate}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
         />
@@ -147,25 +157,28 @@ export default function Home() {
             sidebar={<Backlog todos={backlogTodos} />}
             main={
               <div
-                className={`${styles.weekScroll} ${hideWeekends ? styles.weekScrollFiveColumns : ""}`}
+                className={`${styles.weekScroll} ${visibleDays.length === 5 ? styles.weekScrollFiveColumns : ""}`}
                 ref={weekScrollRef}
               >
-                {visibleColumnNames.map((column, index) => {
-                  const filteredTodos = visibleTodos.filter(
-                    (todo) => todo.column === column,
-                  );
-                  const isToday = index === todayIndex;
+                {visibleDays.map(
+                  ({ dayName, isoDate, dateNumber, weekIndex }) => {
+                    const filteredTodos = visibleTodos.filter(
+                      (todo) => todo.date === isoDate,
+                    );
+                    const isToday = weekIndex === todayIndex;
 
-                  return (
-                    <DayColumn
-                      key={column}
-                      name={column}
-                      dateNumber={weekDates[index]}
-                      todos={filteredTodos}
-                      isToday={isToday}
-                    />
-                  );
-                })}
+                    return (
+                      <DayColumn
+                        key={isoDate}
+                        dayName={dayName}
+                        isoDate={isoDate}
+                        dateNumber={dateNumber}
+                        todos={filteredTodos}
+                        isToday={isToday}
+                      />
+                    );
+                  },
+                )}
                 <DragOverlay>
                   {activeId && (
                     <SortableItem

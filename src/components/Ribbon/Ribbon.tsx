@@ -11,29 +11,29 @@ const FILTER_OPTIONS: { value: ActiveFilter; label: string }[] = [
 
 interface RibbonProps {
   todos: TodoList;
-  todayColumnName: string | null;
+  todayISODate: string | null;
   activeFilter: ActiveFilter;
   onFilterChange: (filter: ActiveFilter) => void;
 }
 
 export default function Ribbon({
   todos,
-  todayColumnName,
+  todayISODate,
   activeFilter,
   onFilterChange,
 }: RibbonProps) {
-  const todayTodos = todayColumnName
-    ? todos.filter((todo) => todo.column === todayColumnName)
+  const todayTodos = todayISODate
+    ? todos.filter((todo) => todo.date === todayISODate)
     : [];
   const todayDoneCount = todayTodos.filter((todo) => todo.status === "Done").length;
 
   const openCount = todos.filter(
-    (todo) => todo.column !== "Backlog" && todo.status !== "Done"
+    (todo) => todo.date && todo.status !== "Done"
   ).length;
   const doneCount = todos.filter(
-    (todo) => todo.column !== "Backlog" && todo.status === "Done"
+    (todo) => todo.date && todo.status === "Done"
   ).length;
-  const backlogCount = todos.filter((todo) => todo.column === "Backlog").length;
+  const backlogCount = todos.filter((todo) => !todo.date).length;
 
   const totalScheduled = openCount + doneCount;
   const progressPercentage =

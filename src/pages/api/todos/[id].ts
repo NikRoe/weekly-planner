@@ -10,6 +10,7 @@ export default async function handler(
   if (!id) {
     return response.status(404).json("Entry not found");
   }
+
   if (request.method === "GET") {
     const todo = await prisma.todo.findFirst({ where: { id: id as string } });
     return response.status(200).json(todo);
@@ -24,22 +25,24 @@ export default async function handler(
   }
 
   if (request.method === "PATCH") {
-    const { column } = request.body;
+    const { date } = request.body;
 
     await prisma.todo.update({
       where: { id: id as string },
-      data: { column },
+      data: { date: date ?? null },
     });
+
     return response.status(200).json("Entry updated");
   }
 
   if (request.method === "PUT") {
-    const { title, column, status, notes, category, time } = request.body;
+    const { title, status, notes, category, time, date } = request.body;
 
     await prisma.todo.update({
       where: { id: id as string },
-      data: { title, column, status, notes, category, time },
+      data: { title, status, notes, category, time, date: date || null },
     });
+
     return response.status(200).json("Entry updated");
   }
 

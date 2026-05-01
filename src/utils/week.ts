@@ -38,6 +38,7 @@ function buildWeekLabel(firstDay: Date, lastDay: Date): string {
 
 export interface WeekData {
   weekDates: number[];
+  weekISODates: string[]; // full ISO dates "2026-04-27" for each day (Mon–Sun)
   weekLabel: string;
   weekNumber: number;
   weekYear: number; // ISO week year — year of the Thursday of the week, may differ from calendar year at year boundaries
@@ -61,11 +62,17 @@ export function getWeekData(offset: number = 0): WeekData {
   thursday.setDate(monday.getDate() + 3);
 
   const weekDates = daysOfWeek.map((day) => day.getDate());
+  const weekISODates = daysOfWeek.map((day) => {
+    const year = day.getFullYear();
+    const month = String(day.getMonth() + 1).padStart(2, "0");
+    const date = String(day.getDate()).padStart(2, "0");
+    return `${year}-${month}-${date}`;
+  });
   const weekLabel = buildWeekLabel(daysOfWeek[0], daysOfWeek[6]);
   const weekNumber = getISOWeekNumber(monday);
   const weekYear = thursday.getFullYear();
   const todayTime = today.getTime();
   const todayIndex = daysOfWeek.findIndex((day) => day.getTime() === todayTime);
 
-  return { weekDates, weekLabel, weekNumber, weekYear, todayIndex };
+  return { weekDates, weekISODates, weekLabel, weekNumber, weekYear, todayIndex };
 }
