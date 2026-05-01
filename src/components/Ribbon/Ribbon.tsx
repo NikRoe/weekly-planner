@@ -25,13 +25,15 @@ export default function Ribbon({
   const todayTodos = todayISODate
     ? todos.filter((todo) => todo.date === todayISODate)
     : [];
-  const todayDoneCount = todayTodos.filter((todo) => todo.status === "Done").length;
+  const todayDoneCount = todayTodos.filter(
+    (todo) => todo.status === "Done",
+  ).length;
 
   const openCount = todos.filter(
-    (todo) => todo.date && todo.status !== "Done"
+    (todo) => todo.date && todo.status !== "Done",
   ).length;
   const doneCount = todos.filter(
-    (todo) => todo.date && todo.status === "Done"
+    (todo) => todo.date && todo.status === "Done",
   ).length;
   const backlogCount = todos.filter((todo) => !todo.date).length;
 
@@ -82,24 +84,24 @@ export default function Ribbon({
             </button>
           ))}
         </div>
-
-        <div
-          role="progressbar"
-          aria-label="Wochenfortschritt"
-          aria-valuenow={progressPercentage}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          className={styles.progressBar}
-        >
+        <div className={styles.progressWrapper}>
           <div
-            className={styles.progressFill}
-            style={{ width: `${progressPercentage}%` }}
-          />
+            role="progressbar"
+            aria-label="Wochenfortschritt"
+            aria-valuenow={progressPercentage}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className={styles.progressBar}
+          >
+            <div
+              className={styles.progressFill}
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+          <span className={styles.progressPercentage} aria-hidden="true">
+            {progressPercentage}%
+          </span>
         </div>
-
-        <span className={styles.progressPercentage} aria-hidden="true">
-          {progressPercentage}%
-        </span>
       </div>
     </section>
   );

@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-around;
   padding: var(--s-5) var(--s-8);
   border-bottom: 1px solid var(--divider);
   background: var(--bg);
@@ -59,8 +60,6 @@
 
 /* ── Center — week navigation ── */
 .topbarCenter {
-  flex: 1 1 300px;
-  min-width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,8 +95,6 @@
 .weekLabel {
   font-family: var(--font-display);
   font-size: 20px;
-  padding: 0 var(--s-3);
-  min-width: 200px;
   text-align: center;
   color: var(--ink);
 }
@@ -124,7 +121,6 @@
 /* ── Right ── */
 .topbarRight {
   flex: none;
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: var(--s-2);

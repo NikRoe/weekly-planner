@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-2);
+  gap: var(--s-3);
   padding: var(--s-4);
   border-bottom: 1px solid var(--divider);
   background: var(--bg-elevated);
@@ -41,7 +41,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--s-4);
-  margin-left: auto;
 }
 
 /* ── Filter chips ── */
@@ -83,7 +82,13 @@
 }
 
 /* ── Progress ── */
+.progressWrapper {
+  display: flex;
+  align-items: center;
+}
+
 .progressBar {
+  display: flex;
   width: 280px;
   height: 6px;
   background: var(--surface-2);
