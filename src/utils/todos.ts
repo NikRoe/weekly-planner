@@ -4,31 +4,18 @@ export const initialTodos: TodoList = [
   {
     id: "12",
     title: "Briefe",
-    column: "Donnerstag",
+    date: "2026-04-24",
     status: "Done",
   },
   {
     id: "23",
     title: "Saugen",
-    column: "Donnerstag",
-    status: "Open",
-  },
-  {
-    id: "34",
-    title: "Splid",
-    column: "Freitag",
-    status: "Done",
-  },
-  {
-    id: "214",
-    title: "Splid",
-    column: "Samstag",
+    date: "2026-04-24",
     status: "Open",
   },
 ];
 
-export const columnNames = [
-  "Backlog",
+export const DAY_NAMES = [
   "Montag",
   "Dienstag",
   "Mittwoch",
@@ -38,4 +25,4 @@ export const columnNames = [
   "Sonntag",
 ] as const;
 
-export type ColumnName = (typeof columnNames)[number];
+export type DayName = (typeof DAY_NAMES)[number];

@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { TodoList } from "../../../types/todo";
-import { ColumnName } from "@/utils/todos";
 import { sortByStatus } from "@/utils/sort";
 import { handleAddTodo } from "@/services/todos";
 import SortableItem from "@/components/SortableItem/SortableItem";
@@ -10,14 +9,16 @@ import { PlusIcon } from "@/components/Icons";
 import styles from "./DayColumn.module.css";
 
 interface DayColumnProps {
-  name: ColumnName;
+  dayName: string;
+  isoDate: string;
   dateNumber: number;
   todos: TodoList;
   isToday: boolean;
 }
 
 export default function DayColumn({
-  name,
+  dayName,
+  isoDate,
   dateNumber,
   todos,
   isToday,
@@ -25,7 +26,7 @@ export default function DayColumn({
   const [isAdding, setIsAdding] = useState(false);
   const [addValue, setAddValue] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { setNodeRef, isOver } = useDroppable({ id: name });
+  const { setNodeRef, isOver } = useDroppable({ id: isoDate });
 
   const doneCount = todos.filter((todo) => todo.status === "Done").length;
 
@@ -37,7 +38,7 @@ export default function DayColumn({
   function handleInlineAddSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const title = addValue.trim();
-    if (title) handleAddTodo({ title, column: name });
+    if (title) handleAddTodo({ title, date: isoDate });
     setAddValue("");
     setIsAdding(false);
   }
@@ -54,7 +55,7 @@ export default function DayColumn({
     <article className={columnClass}>
       <header className={styles.dayHeader}>
         <div className={styles.dayHeaderLeft}>
-          <span className={styles.dayLabel}>{name}</span>
+          <span className={styles.dayLabel}>{dayName}</span>
           <span
             className={`${styles.dayDate} ${isToday ? styles.dayDateToday : ""}`}
           >
@@ -69,7 +70,7 @@ export default function DayColumn({
             type="button"
             className={styles.dayAddButton}
             onClick={openInlineAdd}
-            aria-label={`Aufgabe zu ${name} hinzufügen`}
+            aria-label={`Aufgabe zu ${dayName} hinzufügen`}
           >
             <PlusIcon />
           </button>
@@ -91,14 +92,14 @@ export default function DayColumn({
             >
               <PlusIcon />
               <label
-                htmlFor={`inline-add-${name}`}
+                htmlFor={`inline-add-${isoDate}`}
                 className={styles.visuallyHidden}
               >
                 Aufgabe hinzufügen
               </label>
               <input
                 ref={inputRef}
-                id={`inline-add-${name}`}
+                id={`inline-add-${isoDate}`}
                 type="text"
                 className={styles.inlineAddInput}
                 value={addValue}

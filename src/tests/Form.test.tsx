@@ -3,27 +3,29 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Form from "@/components/Form/Form";
 
-async function fillAndSubmit(title: string, column = "Montag") {
+async function fillAndSubmit(title: string, date = "") {
   await userEvent.clear(screen.getByLabelText("Titel*"));
   await userEvent.type(screen.getByLabelText("Titel*"), title);
-  await userEvent.selectOptions(screen.getByLabelText("Wochentag*"), column);
+  if (date) {
+    await userEvent.type(screen.getByLabelText("Datum"), date);
+  }
   await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 }
 
 describe("Form", () => {
-  it("renders title, weekday and notes fields", () => {
+  it("renders title, date and notes fields", () => {
     render(<Form onSubmitTodo={vi.fn()} />);
     expect(screen.getByLabelText("Titel*")).toBeInTheDocument();
-    expect(screen.getByLabelText("Wochentag*")).toBeInTheDocument();
+    expect(screen.getByLabelText("Datum")).toBeInTheDocument();
     expect(screen.getByLabelText("weitere Notizen")).toBeInTheDocument();
   });
 
   it("calls onSubmitTodo with correct data on valid submit", async () => {
     const onSubmit = vi.fn();
     render(<Form onSubmitTodo={onSubmit} />);
-    await fillAndSubmit("Einkaufen", "Freitag");
+    await fillAndSubmit("Einkaufen", "2026-05-01");
     expect(onSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({ title: "Einkaufen", column: "Freitag" })
+      expect.objectContaining({ title: "Einkaufen", date: "2026-05-01" })
     );
   });
 
@@ -42,12 +44,12 @@ describe("Form", () => {
     ).toBeInTheDocument();
   });
 
-  it("submits successfully without notes", async () => {
+  it("submits successfully without a date (goes to backlog)", async () => {
     const onSubmit = vi.fn();
     render(<Form onSubmitTodo={onSubmit} />);
-    await fillAndSubmit("Briefe", "Backlog");
+    await fillAndSubmit("Briefe");
     expect(onSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({ title: "Briefe", column: "Backlog" })
+      expect.objectContaining({ title: "Briefe" })
     );
   });
 
@@ -55,7 +57,7 @@ describe("Form", () => {
     render(
       <Form
         onSubmitTodo={vi.fn()}
-        defaultValue={{ id: "1", title: "Vorhandene Aufgabe", column: "Mittwoch", status: "Open" }}
+        defaultValue={{ id: "1", title: "Vorhandene Aufgabe", status: "Open" }}
       />
     );
     expect(screen.getByLabelText<HTMLInputElement>("Titel*").value).toBe("Vorhandene Aufgabe");

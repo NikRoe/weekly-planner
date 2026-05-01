@@ -16,9 +16,9 @@ datasource db {
 model Todo {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   title    String
-  column   String
   status   String
   notes    String?
   category String?
   time     String?
+  date     String?  // ISO date "2026-04-27" — nil means Backlog
 }

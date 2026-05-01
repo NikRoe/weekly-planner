@@ -19,6 +19,7 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
   } = useForm<TodoFromForm>({
     resolver: zodResolver(todoSchema),
   });
+
   function onSubmit(data: TodoFromForm) {
     onSubmitTodo(data);
     reset();
@@ -37,26 +38,16 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         className={styles.input}
       />
       {errors.title && <p className={styles.error}>{errors.title.message}</p>}
-      <label htmlFor="weekday">Wochentag*</label>
-      <select
-        id="weekday"
-        required
-        {...register("column")}
-        defaultValue={defaultValue?.column}
-        className={styles.select}
-      >
-        <option value="Backlog">Backlog</option>
-        <option value="Montag">Montag</option>
-        <option value="Dienstag">Dienstag</option>
-        <option value="Mittwoch">Mittwoch</option>
-        <option value="Donnerstag">Donnerstag</option>
-        <option value="Freitag">Freitag</option>
-        <option value="Samstag">Samstag</option>
-        <option value="Sonntag">Sonntag</option>
-      </select>
-      {errors.column && (
-        <p className={styles.error}>Bitte einen Wochentag auswählen</p>
-      )}
+
+      <label htmlFor="date">Datum</label>
+      <input
+        id="date"
+        type="date"
+        {...register("date")}
+        defaultValue={defaultValue?.date ?? ""}
+        className={styles.input}
+      />
+
       <label htmlFor="category">Kategorie</label>
       <select
         id="category"
@@ -85,9 +76,10 @@ export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
         rows={5}
         {...register("notes")}
         id="notes"
-        defaultValue={defaultValue?.notes}
+        defaultValue={defaultValue?.notes ?? ""}
         className={styles.textarea}
       ></textarea>
+
       <Button type="submit" title="Submit" ariaLabel="Submit" variant="default">
         Submit
       </Button>

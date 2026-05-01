@@ -2,16 +2,7 @@ import { z } from "zod";
 
 export const todoSchema = z.object({
   title: z.string().min(3, "Der Titel muss mindestens 3 Zeichen lang sein"),
-  column: z.enum([
-    "Backlog",
-    "Montag",
-    "Dienstag",
-    "Mittwoch",
-    "Donnerstag",
-    "Freitag",
-    "Samstag",
-    "Sonntag",
-  ]),
+  date: z.string().optional(),
   notes: z.string().optional(),
   category: z.string().optional(),
   time: z.string().optional(),
