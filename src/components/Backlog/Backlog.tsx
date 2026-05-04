@@ -4,9 +4,9 @@ import { SortableContext } from "@dnd-kit/sortable";
 import { TodoList } from "../../../types/todo";
 import { sortByStatus } from "@/utils/sort";
 import { handleAddTodo } from "@/services/todos";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import styles from "./Backlog.module.css";
-import { SidebarIcon } from "@/components/Icons";
 
 interface BacklogProps {
   todos: TodoList;
@@ -14,8 +14,8 @@ interface BacklogProps {
 
 export default function Backlog({ todos }: BacklogProps) {
   const [composerValue, setComposerValue] = useState("");
+  const [isBacklogVisible, setIsBacklogVisible] = useState(true);
   const { setNodeRef } = useDroppable({ id: "Backlog" });
-  const [isBacklogOpen, setIsBacklogOpen] = useState(true);
 
   function handleComposerSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,15 +29,17 @@ export default function Backlog({ todos }: BacklogProps) {
     <>
       <button
         type="button"
-        onClick={() => setIsBacklogOpen(!isBacklogOpen)}
-        style={{ position: "absolute", zIndex: "2" }}
-        aria-label={`Backlog ${isBacklogOpen ? "aus" : "ein"}blenden`}
+        onClick={() => setIsBacklogVisible((visible) => !visible)}
+        className={`${styles.toggleButton} ${!isBacklogVisible ? styles.toggleButtonNoBacklog : ""}`}
+        aria-label={isBacklogVisible ? "Backlog ausblenden" : "Backlog anzeigen"}
+        aria-expanded={isBacklogVisible}
+        aria-controls="backlog-panel"
       >
-        <SidebarIcon />
+        {isBacklogVisible ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </button>
 
-      {isBacklogOpen && (
-        <aside className={styles.backlog} aria-label="Backlog">
+      {isBacklogVisible && (
+        <aside id="backlog-panel" className={styles.backlog} aria-label="Backlog">
           <header className={styles.backlogHeader}>
             <h2 className={styles.backlogTitle}>Backlog</h2>
             <span

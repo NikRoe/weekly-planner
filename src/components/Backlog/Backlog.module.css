@@ -1,3 +1,14 @@
+.toggleButton {
+  position: absolute;
+  top: 5px;
+  left: 240px;
+  z-index: 2;
+}
+
+.toggleButtonNoBacklog {
+  left: 10px;
+}
+
 .backlog {
   border-right: 1px solid var(--divider);
   background: var(--bg-sunken);
