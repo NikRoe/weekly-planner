@@ -1,17 +1,3 @@
-.button {
-  position: relative;
-  left: 75px;
-  font-size: xxx-large;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--cta-text);
-}
-
-.button:hover {
-  color: var(--cta-bg);
-}
-
 .weekScroll {
   display: grid;
   grid-template-columns: repeat(7, minmax(180px, 1fr));
