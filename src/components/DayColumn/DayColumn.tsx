@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { TodoList } from "../../../types/todo";
-import { sortByStatus } from "@/utils/sort";
+import { sortByStatus, sortByTime } from "@/utils/sort";
 import { handleAddTodo } from "@/services/todos";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import { PlusIcon } from "@/components/Icons";
@@ -79,9 +79,12 @@ export default function DayColumn({
 
       <ul className={styles.dayList} ref={setNodeRef}>
         <SortableContext items={todos.map((todo) => todo.id)}>
-          {todos.toSorted(sortByStatus).map((todo) => (
-            <SortableItem key={todo.id} todo={todo} />
-          ))}
+          {todos
+            .toSorted(sortByTime)
+            .toSorted(sortByStatus)
+            .map((todo) => (
+              <SortableItem key={todo.id} todo={todo} />
+            ))}
         </SortableContext>
 
         {isAdding ? (
