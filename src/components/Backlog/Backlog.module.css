@@ -1,9 +1,22 @@
+.toggleButton {
+  position: absolute;
+  top: 5px;
+  left: 240px;
+  z-index: 2;
+}
+
+.toggleButtonNoBacklog {
+  left: 10px;
+}
+
 .backlog {
   border-right: 1px solid var(--divider);
   background: var(--bg-sunken);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  flex: none;
+  width: 260px;
 }
 
 /* ── Header ── */
@@ -87,6 +100,9 @@
   display: flex;
   align-items: center;
   gap: var(--s-2);
+  position: fixed;
+  bottom: 0;
+  width: 260px;
 }
 
 .composerForm {
@@ -105,7 +121,9 @@
   color: var(--ink);
   font-size: 13px;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .composerInput:focus {

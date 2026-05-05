@@ -4,6 +4,7 @@ import { SortableContext } from "@dnd-kit/sortable";
 import { TodoList } from "../../../types/todo";
 import { sortByStatus } from "@/utils/sort";
 import { handleAddTodo } from "@/services/todos";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons";
 import SortableItem from "@/components/SortableItem/SortableItem";
 import styles from "./Backlog.module.css";
 
@@ -13,6 +14,7 @@ interface BacklogProps {
 
 export default function Backlog({ todos }: BacklogProps) {
   const [composerValue, setComposerValue] = useState("");
+  const [isBacklogVisible, setIsBacklogVisible] = useState(true);
   const { setNodeRef } = useDroppable({ id: "Backlog" });
 
   function handleComposerSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -24,46 +26,71 @@ export default function Backlog({ todos }: BacklogProps) {
   }
 
   return (
-    <aside className={styles.backlog} aria-label="Backlog">
-      <header className={styles.backlogHeader}>
-        <h2 className={styles.backlogTitle}>Backlog</h2>
-        <span
-          className={styles.backlogCount}
-          aria-label={`${todos.length} Einträge`}
-        >
-          {todos.length}
-        </span>
-      </header>
+    <>
+      <button
+        type="button"
+        onClick={() => setIsBacklogVisible((visible) => !visible)}
+        className={`${styles.toggleButton} ${!isBacklogVisible ? styles.toggleButtonNoBacklog : ""}`}
+        aria-label={isBacklogVisible ? "Backlog ausblenden" : "Backlog anzeigen"}
+        aria-expanded={isBacklogVisible}
+        aria-controls="backlog-panel"
+      >
+        {isBacklogVisible ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </button>
 
-      <p className={styles.backlogHint}>Ideen, die auf ihren Moment warten.</p>
+      {isBacklogVisible && (
+        <aside id="backlog-panel" className={styles.backlog} aria-label="Backlog">
+          <header className={styles.backlogHeader}>
+            <h2 className={styles.backlogTitle}>Backlog</h2>
+            <span
+              className={styles.backlogCount}
+              aria-label={`${todos.length} Einträge`}
+            >
+              {todos.length}
+            </span>
+          </header>
 
-      <ul className={styles.backlogList} ref={setNodeRef}>
-        <SortableContext items={todos.map((todo) => todo.id)}>
-          {todos.toSorted(sortByStatus).map((todo) => (
-            <SortableItem key={todo.id} todo={todo} />
-          ))}
-        </SortableContext>
-        {todos.length === 0 && (
-          <li className={styles.emptyState}>Backlog ist leer</li>
-        )}
-      </ul>
+          <p className={styles.backlogHint}>
+            Ideen, die auf ihren Moment warten.
+          </p>
 
-      <footer className={styles.composer}>
-        <form onSubmit={handleComposerSubmit} className={styles.composerForm}>
-          <label htmlFor="backlog-composer" className={styles.visuallyHidden}>
-            Neue Aufgabe zum Backlog hinzufügen
-          </label>
-          <input
-            id="backlog-composer"
-            type="text"
-            className={styles.composerInput}
-            value={composerValue}
-            onChange={(event) => setComposerValue(event.target.value)}
-            placeholder="Neue Aufgabe zum Backlog…"
-          />
-          <span className={styles.composerHint} aria-hidden="true">↵</span>
-        </form>
-      </footer>
-    </aside>
+          <ul className={styles.backlogList} ref={setNodeRef}>
+            <SortableContext items={todos.map((todo) => todo.id)}>
+              {todos.toSorted(sortByStatus).map((todo) => (
+                <SortableItem key={todo.id} todo={todo} />
+              ))}
+            </SortableContext>
+            {todos.length === 0 && (
+              <li className={styles.emptyState}>Backlog ist leer</li>
+            )}
+          </ul>
+
+          <footer className={styles.composer}>
+            <form
+              onSubmit={handleComposerSubmit}
+              className={styles.composerForm}
+            >
+              <label
+                htmlFor="backlog-composer"
+                className={styles.visuallyHidden}
+              >
+                Neue Aufgabe zum Backlog hinzufügen
+              </label>
+              <input
+                id="backlog-composer"
+                type="text"
+                className={styles.composerInput}
+                value={composerValue}
+                onChange={(event) => setComposerValue(event.target.value)}
+                placeholder="Neue Aufgabe zum Backlog…"
+              />
+              <span className={styles.composerHint} aria-hidden="true">
+                ↵
+              </span>
+            </form>
+          </footer>
+        </aside>
+      )}
+    </>
   );
 }

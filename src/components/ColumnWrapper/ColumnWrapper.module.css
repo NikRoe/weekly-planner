@@ -1,17 +1,7 @@
 .board {
-  display: grid;
-  grid-template-columns: 260px 1fr;
+  position: relative;
+  display: flex;
   overflow: hidden;
   height: calc(100vh - 140px);
   min-height: 600px;
-}
-
-@media (max-width: 1000px) {
-  .board {
-    grid-template-columns: 1fr;
-  }
-
-  .board > :first-child {
-    display: none;
-  }
 }
