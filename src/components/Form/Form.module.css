@@ -1,46 +1,204 @@
 .form {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  gap: 1rem;
-  border: 2px solid var(--border-color);
-  padding: 0.5rem;
-  color: var(--text-color);
-  border-radius: 10px;
+  width: 480px;
+  max-width: 100%;
+  border: 1px solid var(--ink);
+  background: var(--bg-sunken);
+}
+
+/* ── Header ── */
+.modalHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-6) var(--s-6) var(--s-4);
+  border-bottom: 1px solid var(--divider);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-bottom: var(--s-1);
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.closeButton {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.closeButton:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* ── Body ── */
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
 }
 
 .input,
-.select,
 .textarea {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--input-bg);
-  color: inherit;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .input:focus,
-.select:focus,
 .textarea:focus {
-  border-color: slategray;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
 
-  box-shadow: 0 0 5px rgba(112, 128, 144, 0.5);
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-4);
 }
 
 .textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
+  line-height: 1.5;
 }
 
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+
+/* ── Category chips ── */
+.chipGroup {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  background: var(--surface);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.chipActive {
+  background: var(--accent-tint-strong);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ── Error ── */
 .error {
-  font-size: 0.875rem;
+  font-size: 12px;
   color: var(--color-error);
-  background-color: var(--background-error);
-  padding: 0.5rem;
-  border-radius: 6px;
-  border-left: 5px solid var(--border-error);
-  margin-top: -0.5rem;
+  background: var(--background-error);
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--border-error);
+}
+
+/* ── Footer ── */
+.modalFoot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-6) var(--s-5);
+  border-top: 1px solid var(--divider);
+}
+
+.btnSecondary {
+  padding: 7px 14px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  background: var(--surface);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btnSecondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.btnPrimary {
+  padding: 7px 16px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid transparent;
+  transition: background 0.15s ease;
+}
+
+.btnPrimary:hover {
+  background: var(--ink-2);
 }
