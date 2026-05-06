@@ -49,7 +49,7 @@ export default function Home() {
 
     const id = setTimeout(() => {
       weekScrollRef.current?.scrollTo({
-        left: todayIndex * 307,
+        left: todayIndex * 150,
         behavior: "smooth",
       });
     }, 100);

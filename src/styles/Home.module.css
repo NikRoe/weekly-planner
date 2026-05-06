@@ -1,12 +1,12 @@
 .weekScroll {
   display: grid;
-  grid-template-columns: repeat(7, minmax(180px, 1fr));
+  grid-template-columns: repeat(7, minmax(250px, 1fr));
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .weekScrollFiveColumns {
-  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  grid-template-columns: repeat(5, minmax(250px, 1fr));
 }
 
 .weekScroll::-webkit-scrollbar {

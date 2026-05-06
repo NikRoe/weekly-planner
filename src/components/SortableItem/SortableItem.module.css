@@ -4,7 +4,10 @@
   border-radius: var(--r-md);
   padding: var(--card-pad-y) var(--card-pad-x);
   cursor: grab;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
   position: relative;
   box-shadow: var(--shadow-sm);
   list-style: none;
@@ -54,7 +57,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .checkbox:hover {
@@ -97,11 +103,14 @@
 
 /* ── Footer ── */
 .taskFooter {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 40px;
+  grid-template-areas: "category time buttons";
   align-items: center;
   gap: 6px;
   margin-top: 8px;
-  flex-wrap: wrap;
+  padding-top: var(--s-2);
+  border-top: 1px dotted var(--ink-3);
 }
 
 .tag {
@@ -112,12 +121,26 @@
   padding: 2px 7px;
   border-radius: 4px;
   font-weight: 500;
+  width: fit-content;
+  align-self: center;
 }
 
-.tagWork     { background: var(--tag-work);     color: var(--tag-work-ink); }
-.tagPersonal { background: var(--tag-personal); color: var(--tag-personal-ink); }
-.tagErrand   { background: var(--tag-errand);   color: var(--tag-errand-ink); }
-.tagFocus    { background: var(--tag-focus);     color: var(--tag-focus-ink); }
+.tagWork {
+  background: var(--tag-work);
+  color: var(--tag-work-ink);
+}
+.tagPersonal {
+  background: var(--tag-personal);
+  color: var(--tag-personal-ink);
+}
+.tagErrand {
+  background: var(--tag-errand);
+  color: var(--tag-errand-ink);
+}
+.tagFocus {
+  background: var(--tag-focus);
+  color: var(--tag-focus-ink);
+}
 
 .taskTime {
   font-family: var(--font-mono);
@@ -128,19 +151,10 @@
   gap: 4px;
 }
 
-/* ── Menu (top-right, hover-revealed) ── */
 .taskMenuArea {
-  position: absolute;
-  top: 8px;
-  right: 8px;
   display: flex;
   align-items: center;
   gap: 2px;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.card:hover .taskMenuArea {
   opacity: 1;
 }
 
@@ -152,10 +166,18 @@
   align-items: center;
   justify-content: center;
   color: var(--ink-4);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .taskMenuButton:hover {
   background: var(--surface-hover);
   color: var(--ink);
+}
+
+.taskMenuButtonWrapper {
+  grid-area: buttons;
+  display: flex;
+  justify-content: flex-end;
 }

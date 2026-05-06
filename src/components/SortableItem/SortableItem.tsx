@@ -143,46 +143,43 @@ export default function SortableItem({
           <div className={styles.taskBody}>
             <p className={titleClass}>{todo.title}</p>
             {todo.notes && <p className={styles.taskNotes}>{todo.notes}</p>}
-            {(todo.category || todo.time) && (
-              <div className={styles.taskFooter}>
-                {todo.category && (
-                  <span
-                    className={`${styles.tag} ${CATEGORY_TAG_CLASSES[todo.category] ?? ""}`}
-                  >
-                    {CATEGORY_LABELS[todo.category] ?? todo.category}
-                  </span>
-                )}
-                {todo.time && (
-                  <span className={styles.taskTime}>
-                    <ClockIcon />
-                    {todo.time}
-                  </span>
-                )}
+            <div className={styles.taskFooter}>
+              {todo.category && (
+                <span
+                  className={`${styles.tag} ${CATEGORY_TAG_CLASSES[todo.category] ?? ""}`}
+                >
+                  {CATEGORY_LABELS[todo.category] ?? todo.category}
+                </span>
+              )}
+              {todo.time && (
+                <span className={styles.taskTime}>
+                  <ClockIcon />
+                  {todo.time}
+                </span>
+              )}
+              <div className={styles.taskMenuButtonWrapper}>
+                <button
+                  type="button"
+                  className={styles.taskMenuButton}
+                  onClick={handleEditClick}
+                  aria-label="Bearbeiten"
+                  data-dnd-disabled
+                >
+                  <PenIcon />
+                </button>
+
+                <button
+                  type="button"
+                  className={styles.taskMenuButton}
+                  onClick={handleDeleteClick}
+                  aria-label="Löschen"
+                  data-dnd-disabled
+                >
+                  <TrashIcon />
+                </button>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-
-        <div className={styles.taskMenuArea} data-dnd-disabled>
-          <button
-            type="button"
-            className={styles.taskMenuButton}
-            onClick={handleEditClick}
-            aria-label="Bearbeiten"
-            data-dnd-disabled
-          >
-            <PenIcon />
-          </button>
-
-          <button
-            type="button"
-            className={styles.taskMenuButton}
-            onClick={handleDeleteClick}
-            aria-label="Löschen"
-            data-dnd-disabled
-          >
-            <TrashIcon />
-          </button>
         </div>
       </div>
     </li>
