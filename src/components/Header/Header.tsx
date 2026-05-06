@@ -50,7 +50,9 @@ export default function Header({
           handleAddTodo(newTodo);
           closeModal();
         }}
-      />
+        onClose={closeModal}
+      />,
+      true
     );
   }
 

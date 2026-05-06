@@ -64,7 +64,9 @@ export default function SortableItem({
           closeModal();
         }}
         defaultValue={todo}
+        onClose={closeModal}
       />,
+      true,
     );
   }
 

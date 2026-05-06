@@ -1,88 +1,142 @@
-import styles from "./Form.module.css";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Todo } from "../../../types/todo";
-import Button from "../Button/Button";
 import { todoSchema, type TodoFromForm } from "../../lib/todoSchema";
+import styles from "./Form.module.css";
+
+const CATEGORIES: { value: string; label: string }[] = [
+  { value: "work", label: "Arbeit" },
+  { value: "personal", label: "Persönlich" },
+  { value: "errand", label: "Besorgung" },
+  { value: "focus", label: "Fokus" },
+];
 
 interface FormProps {
   onSubmitTodo: (newTodo: TodoFromForm) => void;
   defaultValue?: Todo;
+  onClose: () => void;
 }
 
-export default function Form({ onSubmitTodo, defaultValue }: FormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<TodoFromForm>({
+export default function Form({ onSubmitTodo, defaultValue, onClose }: FormProps) {
+  const isEditMode = !!defaultValue;
+
+  const { register, handleSubmit, control, formState: { errors } } = useForm<TodoFromForm>({
     resolver: zodResolver(todoSchema),
+    defaultValues: {
+      title: defaultValue?.title ?? "",
+      date: defaultValue?.date ?? "",
+      notes: defaultValue?.notes ?? "",
+      category: defaultValue?.category ?? "",
+      time: defaultValue?.time ?? "",
+    },
   });
 
   function onSubmit(data: TodoFromForm) {
     onSubmitTodo(data);
-    reset();
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <label htmlFor="title">Titel*</label>
-      <input
-        id="title"
-        type="text"
-        required
-        {...register("title")}
-        defaultValue={defaultValue?.title}
-        autoFocus
-        className={styles.input}
-      />
-      {errors.title && <p className={styles.error}>{errors.title.message}</p>}
+      <div className={styles.modalHead}>
+        <div>
+          <p className={styles.eyebrow}>
+            {isEditMode ? "Aufgabe bearbeiten" : "Neue Aufgabe"}
+          </p>
+          <h2 className={styles.modalTitle}>
+            {isEditMode ? defaultValue.title : "Was möchtest du tun?"}
+          </h2>
+        </div>
+        <button
+          type="button"
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Schließen"
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+            <line x1="3" y1="3" x2="13" y2="13" />
+            <line x1="13" y1="3" x2="3" y2="13" />
+          </svg>
+        </button>
+      </div>
 
-      <label htmlFor="date">Datum</label>
-      <input
-        id="date"
-        type="date"
-        {...register("date")}
-        defaultValue={defaultValue?.date ?? ""}
-        className={styles.input}
-      />
+      <div className={styles.modalBody}>
+        <div className={styles.field}>
+          <label htmlFor="title" className={styles.fieldLabel}>Titel</label>
+          <input
+            id="title"
+            type="text"
+            {...register("title")}
+            placeholder="z. B. Wochenplanung"
+            autoFocus
+            className={styles.input}
+          />
+          {errors.title && <p className={styles.error}>{errors.title.message}</p>}
+        </div>
 
-      <label htmlFor="category">Kategorie</label>
-      <select
-        id="category"
-        {...register("category")}
-        defaultValue={defaultValue?.category}
-        className={styles.select}
-      >
-        <option value="">— Keine Kategorie —</option>
-        <option value="work">Arbeit</option>
-        <option value="personal">Persönlich</option>
-        <option value="errand">Besorgung</option>
-        <option value="focus">Fokus</option>
-      </select>
+        <div className={styles.field}>
+          <label htmlFor="notes" className={styles.fieldLabel}>Notizen</label>
+          <textarea
+            id="notes"
+            {...register("notes")}
+            placeholder="Optional — Details, Kontext, Links"
+            rows={3}
+            className={styles.textarea}
+          />
+        </div>
 
-      <label htmlFor="time">Uhrzeit</label>
-      <input
-        id="time"
-        type="time"
-        {...register("time")}
-        defaultValue={defaultValue?.time}
-        className={styles.input}
-      />
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="date" className={styles.fieldLabel}>Datum</label>
+            <input
+              id="date"
+              type="date"
+              {...register("date")}
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="time" className={styles.fieldLabel}>Uhrzeit</label>
+            <input
+              id="time"
+              type="time"
+              {...register("time")}
+              className={styles.input}
+            />
+          </div>
+        </div>
 
-      <label htmlFor="notes">weitere Notizen</label>
-      <textarea
-        rows={5}
-        {...register("notes")}
-        id="notes"
-        defaultValue={defaultValue?.notes ?? ""}
-        className={styles.textarea}
-      ></textarea>
+        <div className={styles.field}>
+          <span className={styles.fieldLabel}>Kategorie</span>
+          <Controller
+            control={control}
+            name="category"
+            render={({ field }) => (
+              <div className={styles.chipGroup}>
+                {CATEGORIES.map(({ value, label }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={`${styles.chip} ${field.value === value ? styles.chipActive : ""}`}
+                    onClick={() => field.onChange(field.value === value ? "" : value)}
+                    data-cat={value}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          />
+        </div>
+      </div>
 
-      <Button type="submit" title="Submit" ariaLabel="Submit" variant="default">
-        Submit
-      </Button>
+      <div className={styles.modalFoot}>
+        <button type="button" className={styles.btnSecondary} onClick={onClose}>
+          Abbrechen
+        </button>
+        <button type="submit" className={styles.btnPrimary}>
+          {isEditMode ? "Speichern" : "Anlegen"}
+        </button>
+      </div>
     </form>
   );
 }
