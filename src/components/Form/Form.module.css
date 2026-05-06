@@ -3,8 +3,10 @@
   flex-direction: column;
   width: 480px;
   max-width: 100%;
-  border: 1px solid var(--ink);
-  background: var(--bg-sunken);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 /* ── Header ── */
