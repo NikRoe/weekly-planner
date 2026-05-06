@@ -4,8 +4,7 @@ import { Todo } from "../../../types/todo";
 import { useModal } from "@/provider/ModalProvider";
 import { CheckIcon, ClockIcon, PenIcon, TrashIcon } from "@/components/Icons";
 import { handleDeleteTodo, handleEditTodo } from "@/services/todos";
-import Button from "../Button/Button";
-import Wrapper from "../Wrapper/Wrapper";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal/DeleteConfirmModal";
 import Form from "../Form/Form";
 import styles from "./SortableItem.module.css";
 
@@ -73,29 +72,14 @@ export default function SortableItem({
   function handleDeleteClick(event: React.MouseEvent) {
     event.stopPropagation();
     openModal(
-      <Wrapper>
-        <Button
-          type="button"
-          onClick={() => {
-            handleDeleteTodo(todo.id);
-            closeModal();
-          }}
-          ariaLabel="Todo löschen"
-          title="Todo löschen"
-          variant="danger"
-        >
-          Todo wirklich löschen?
-        </Button>
-        <Button
-          type="button"
-          onClick={closeModal}
-          ariaLabel="Abbrechen"
-          title="Abbrechen"
-          variant="default"
-        >
-          Abbrechen
-        </Button>
-      </Wrapper>,
+      <DeleteConfirmModal
+        taskTitle={todo.title}
+        onConfirm={() => {
+          handleDeleteTodo(todo.id);
+          closeModal();
+        }}
+        onClose={closeModal}
+      />,
       true,
     );
   }
