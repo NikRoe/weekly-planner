@@ -1,4 +1,4 @@
-import { Todo } from "../../types/todo";
+import { Todo, TodoList } from "../../types/todo";
 import { TodoFromForm } from "../lib/todoSchema";
 import { mutate } from "swr";
 
@@ -32,6 +32,29 @@ export async function handleEditTodo(updatedTodo: Todo) {
   if (response.ok) {
     mutate("/api/todos");
   }
+}
+
+export async function handleToggleStatus(todo: Todo) {
+  const updatedTodo = { ...todo, status: todo.status === "Done" ? "Open" : "Done" };
+
+  await mutate(
+    "/api/todos",
+    async (currentTodos: TodoList | undefined) => {
+      await fetch(`/api/todos/${todo.id}`, {
+        method: "PUT",
+        body: JSON.stringify(updatedTodo),
+        headers: { "Content-Type": "application/json" },
+      });
+      return (currentTodos ?? []).map((currentTodo) => (currentTodo.id === todo.id ? updatedTodo : currentTodo));
+    },
+    {
+      optimisticData: (currentTodos: TodoList | undefined) =>
+        (currentTodos ?? []).map((currentTodo) => (currentTodo.id === todo.id ? updatedTodo : currentTodo)),
+      populateCache: true,
+      revalidate: false,
+      rollbackOnError: true,
+    },
+  );
 }
 
 export async function handleResetTodoStatus() {

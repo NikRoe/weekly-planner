@@ -3,7 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Todo } from "../../../types/todo";
 import { useModal } from "@/provider/ModalProvider";
 import { CheckIcon, ClockIcon, PenIcon, TrashIcon } from "@/components/Icons";
-import { handleDeleteTodo, handleEditTodo } from "@/services/todos";
+import { handleDeleteTodo, handleEditTodo, handleToggleStatus } from "@/services/todos";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal/DeleteConfirmModal";
 import Form from "../Form/Form";
 import styles from "./SortableItem.module.css";
@@ -49,9 +49,9 @@ export default function SortableItem({
 
   const isDone = todo.status === "Done";
 
-  function handleToggleStatus(event: React.MouseEvent) {
+  function handleCheckboxClick(event: React.MouseEvent) {
     event.stopPropagation();
-    handleEditTodo({ ...todo, status: isDone ? "Open" : "Done" });
+    handleToggleStatus(todo);
   }
 
   function handleEditClick(event: React.MouseEvent) {
@@ -116,7 +116,7 @@ export default function SortableItem({
           <button
             type="button"
             className={checkboxClass}
-            onClick={handleToggleStatus}
+            onClick={handleCheckboxClick}
             aria-label={
               isDone ? "Als offen markieren" : "Als erledigt markieren"
             }

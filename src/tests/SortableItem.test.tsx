@@ -14,14 +14,17 @@ vi.mock("@dnd-kit/sortable", () => ({
   }),
 }));
 
+const mockHandleToggleStatus = vi.fn();
 const mockHandleEditTodo = vi.fn();
+
 vi.mock("@/services/todos", () => ({
+  handleToggleStatus: (...args: unknown[]) => mockHandleToggleStatus(...args),
   handleEditTodo: (...args: unknown[]) => mockHandleEditTodo(...args),
   handleDeleteTodo: vi.fn(),
 }));
 
-const openTodo = { id: "1", title: "Briefe schreiben", column: "Montag", status: "Open" };
-const doneTodo = { id: "2", title: "Einkaufen", column: "Dienstag", status: "Done" };
+const openTodo = { id: "1", title: "Briefe schreiben", status: "Open" };
+const doneTodo = { id: "2", title: "Einkaufen", status: "Done" };
 
 function renderItem(todo = openTodo) {
   return render(
@@ -32,7 +35,10 @@ function renderItem(todo = openTodo) {
 }
 
 describe("SortableItem", () => {
-  beforeEach(() => mockHandleEditTodo.mockClear());
+  beforeEach(() => {
+    mockHandleToggleStatus.mockClear();
+    mockHandleEditTodo.mockClear();
+  });
 
   it("renders the todo title", () => {
     renderItem();
@@ -53,25 +59,19 @@ describe("SortableItem", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls handleEditTodo with status 'Done' when Open todo is toggled", async () => {
+  it("calls handleToggleStatus with the todo when Open todo is toggled", async () => {
     renderItem(openTodo);
     await userEvent.click(
       screen.getByRole("button", { name: "Als erledigt markieren" })
     );
-    expect(mockHandleEditTodo).toHaveBeenCalledWith({
-      ...openTodo,
-      status: "Done",
-    });
+    expect(mockHandleToggleStatus).toHaveBeenCalledWith(openTodo);
   });
 
-  it("calls handleEditTodo with status 'Open' when Done todo is toggled", async () => {
+  it("calls handleToggleStatus with the todo when Done todo is toggled", async () => {
     renderItem(doneTodo);
     await userEvent.click(
       screen.getByRole("button", { name: "Als offen markieren" })
     );
-    expect(mockHandleEditTodo).toHaveBeenCalledWith({
-      ...doneTodo,
-      status: "Open",
-    });
+    expect(mockHandleToggleStatus).toHaveBeenCalledWith(doneTodo);
   });
 });
