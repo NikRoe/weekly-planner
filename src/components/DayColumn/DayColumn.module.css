@@ -84,6 +84,11 @@
   letter-spacing: 0.05em;
 }
 
+.addButtonWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
 .dayAddButton {
   opacity: 0;
   transition:
@@ -128,6 +133,10 @@
 }
 
 /* ── Empty state / Inline add ── */
+.emptyStateWrapper {
+  position: relative;
+}
+
 .emptyStateButton {
   display: flex;
   align-items: center;

@@ -2,9 +2,12 @@ import { useRef, useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { TodoList } from "../../../types/todo";
+import { Template } from "../../../types/template";
 import { sortByStatus, sortByTime } from "@/utils/sort";
 import { handleAddTodo } from "@/services/todos";
+import { templateToTodoInput } from "@/utils/templates";
 import SortableItem from "@/components/SortableItem/SortableItem";
+import AddTaskMenu from "@/components/AddTaskMenu/AddTaskMenu";
 import { PlusIcon } from "@/components/Icons";
 import styles from "./DayColumn.module.css";
 
@@ -25,7 +28,10 @@ export default function DayColumn({
 }: DayColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [addValue, setAddValue] = useState("");
+  const [activeMenu, setActiveMenu] = useState<"header" | "empty" | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const headerAddButtonRef = useRef<HTMLButtonElement | null>(null);
+  const emptyAddButtonRef = useRef<HTMLButtonElement | null>(null);
   const { setNodeRef, isOver } = useDroppable({ id: isoDate });
 
   const doneCount = todos.filter((todo) => todo.status === "Done").length;
@@ -41,6 +47,10 @@ export default function DayColumn({
     if (title) handleAddTodo({ title, date: isoDate });
     setAddValue("");
     setIsAdding(false);
+  }
+
+  function handleSelectTemplate(template: Template) {
+    handleAddTodo(templateToTodoInput(template, isoDate));
   }
 
   const columnClass = [
@@ -66,14 +76,26 @@ export default function DayColumn({
           <span className={styles.dayCount}>
             {doneCount}/{todos.length}
           </span>
-          <button
-            type="button"
-            className={styles.dayAddButton}
-            onClick={openInlineAdd}
-            aria-label={`Aufgabe zu ${dayName} hinzufügen`}
-          >
-            <PlusIcon />
-          </button>
+          <div className={styles.addButtonWrapper}>
+            <button
+              ref={headerAddButtonRef}
+              type="button"
+              className={styles.dayAddButton}
+              onClick={() =>
+                setActiveMenu((current) => (current === "header" ? null : "header"))
+              }
+              aria-label={`Aufgabe zu ${dayName} hinzufügen`}
+            >
+              <PlusIcon />
+            </button>
+            <AddTaskMenu
+              isOpen={activeMenu === "header"}
+              onClose={() => setActiveMenu(null)}
+              triggerRef={headerAddButtonRef}
+              onSelectNew={openInlineAdd}
+              onSelectTemplate={handleSelectTemplate}
+            />
+          </div>
         </div>
       </header>
 
@@ -117,15 +139,25 @@ export default function DayColumn({
           </li>
         ) : (
           todos.length === 0 && (
-            <li>
+            <li className={styles.emptyStateWrapper}>
               <button
+                ref={emptyAddButtonRef}
                 type="button"
                 className={styles.emptyStateButton}
-                onClick={openInlineAdd}
+                onClick={() =>
+                  setActiveMenu((current) => (current === "empty" ? null : "empty"))
+                }
               >
                 <PlusIcon />
                 <span>Nichts geplant</span>
               </button>
+              <AddTaskMenu
+                isOpen={activeMenu === "empty"}
+                onClose={() => setActiveMenu(null)}
+                triggerRef={emptyAddButtonRef}
+                onSelectNew={openInlineAdd}
+                onSelectTemplate={handleSelectTemplate}
+              />
             </li>
           )
         )}
