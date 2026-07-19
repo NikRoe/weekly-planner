@@ -63,4 +63,31 @@ describe("Form", () => {
     );
     expect(screen.getByLabelText<HTMLInputElement>("Titel").value).toBe("Vorhandene Aufgabe");
   });
+
+  it("pre-fills fields from initialValues without entering edit mode", () => {
+    render(
+      <Form
+        onSubmitTodo={vi.fn()}
+        onClose={vi.fn()}
+        initialValues={{ title: "Wochenplanung", category: "work" }}
+      />
+    );
+    expect(screen.getByLabelText<HTMLInputElement>("Titel").value).toBe("Wochenplanung");
+    expect(screen.getByText("Neue Aufgabe")).toBeInTheDocument();
+  });
+
+  it("submits the values pre-filled from initialValues unchanged", async () => {
+    const onSubmit = vi.fn();
+    render(
+      <Form
+        onSubmitTodo={onSubmit}
+        onClose={vi.fn()}
+        initialValues={{ title: "Wochenplanung", category: "work" }}
+      />
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Anlegen" }));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Wochenplanung", category: "work" })
+    );
+  });
 });

@@ -1,0 +1,94 @@
+.panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  z-index: 50;
+  width: 200px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.panelRight {
+  right: 0;
+}
+
+.panelLeft {
+  left: 0;
+}
+
+/* ── Choice step ── */
+.choiceList {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-2);
+}
+
+.choiceButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: var(--s-3) var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  color: var(--ink-2);
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.choiceButton:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* ── Template step ── */
+.templateStep {
+  display: flex;
+  flex-direction: column;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--s-3) var(--s-3);
+  border-bottom: 1px solid var(--divider);
+  font-size: 12px;
+  color: var(--ink-3);
+  transition: color 0.15s ease;
+}
+
+.backButton:hover {
+  color: var(--ink);
+}
+
+.templateList {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-2);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.templateButton {
+  width: 100%;
+  padding: var(--s-3) var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  color: var(--ink-2);
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.templateButton:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.emptyState {
+  padding: var(--s-4) var(--s-3);
+  font-size: 12.5px;
+  color: var(--ink-3);
+  text-align: center;
+}
