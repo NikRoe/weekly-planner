@@ -2,7 +2,10 @@ import { useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useModal } from "@/provider/ModalProvider";
 import Form from "@/components/Form/Form";
+import AddTaskMenu from "@/components/AddTaskMenu/AddTaskMenu";
 import { handleAddTodo } from "@/services/todos";
+import { templateToTodoInput } from "@/utils/templates";
+import { Template } from "../../../types/template";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -41,7 +44,9 @@ export default function Header({
   const { openModal, closeModal } = useModal();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isWeekNavOpen, setIsWeekNavOpen] = useState(true);
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
   const gearButtonRef = useRef<HTMLButtonElement | null>(null);
+  const newTaskButtonRef = useRef<HTMLButtonElement | null>(null);
 
   function handleNewTask() {
     openModal(
@@ -50,6 +55,20 @@ export default function Header({
           handleAddTodo(newTodo);
           closeModal();
         }}
+        onClose={closeModal}
+      />,
+      true
+    );
+  }
+
+  function handleUseTemplate(template: Template) {
+    openModal(
+      <Form
+        onSubmitTodo={(newTodo) => {
+          handleAddTodo(newTodo);
+          closeModal();
+        }}
+        initialValues={templateToTodoInput(template)}
         onClose={closeModal}
       />,
       true
@@ -147,14 +166,25 @@ export default function Header({
           <GearIcon />
         </button>
 
-        <button
-          type="button"
-          className={styles.newTaskButton}
-          onClick={handleNewTask}
-        >
-          <PlusIcon />
-          <span className={styles.newTaskButtonLabel}>Neue Aufgabe</span>
-        </button>
+        <div className={styles.newTaskButtonWrapper}>
+          <button
+            ref={newTaskButtonRef}
+            type="button"
+            className={styles.newTaskButton}
+            onClick={() => setIsAddMenuOpen((open) => !open)}
+          >
+            <PlusIcon />
+            <span className={styles.newTaskButtonLabel}>Neue Aufgabe</span>
+          </button>
+          <AddTaskMenu
+            isOpen={isAddMenuOpen}
+            onClose={() => setIsAddMenuOpen(false)}
+            triggerRef={newTaskButtonRef}
+            onSelectNew={handleNewTask}
+            onSelectTemplate={handleUseTemplate}
+            align="right"
+          />
+        </div>
 
         <button
           type="button"

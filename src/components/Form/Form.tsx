@@ -14,20 +14,26 @@ const CATEGORIES: { value: string; label: string }[] = [
 interface FormProps {
   onSubmitTodo: (newTodo: TodoFromForm) => void;
   defaultValue?: Todo;
+  initialValues?: TodoFromForm;
   onClose: () => void;
 }
 
-export default function Form({ onSubmitTodo, defaultValue, onClose }: FormProps) {
+export default function Form({
+  onSubmitTodo,
+  defaultValue,
+  initialValues,
+  onClose,
+}: FormProps) {
   const isEditMode = !!defaultValue;
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<TodoFromForm>({
     resolver: zodResolver(todoSchema),
     defaultValues: {
-      title: defaultValue?.title ?? "",
-      date: defaultValue?.date ?? "",
-      notes: defaultValue?.notes ?? "",
-      category: defaultValue?.category ?? "",
-      time: defaultValue?.time ?? "",
+      title: defaultValue?.title ?? initialValues?.title ?? "",
+      date: defaultValue?.date ?? initialValues?.date ?? "",
+      notes: defaultValue?.notes ?? initialValues?.notes ?? "",
+      category: defaultValue?.category ?? initialValues?.category ?? "",
+      time: defaultValue?.time ?? initialValues?.time ?? "",
     },
   });
 

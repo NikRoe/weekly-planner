@@ -232,6 +232,11 @@
   box-shadow: var(--shadow-sm);
 }
 
+.newTaskButtonWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
 .newTaskButton {
   display: flex;
   align-items: center;
