@@ -137,7 +137,7 @@ export default function Home() {
         weekLabel={weekLabel}
         onPreviousWeek={() => setWeekOffset((offset) => offset - 1)}
         onNextWeek={() => setWeekOffset((offset) => offset + 1)}
-        onTodayClick={() => setWeekOffset(0)}
+        onThisWeek={() => setWeekOffset(0)}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />

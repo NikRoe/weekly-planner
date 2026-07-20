@@ -34,6 +34,11 @@ export const TASK_TEMPLATES: TemplateList = [
     id: "exercise",
     title: "Krafttraining",
     category: "personal",
+    notes: `Liegestütz – so viele wie sauber möglich
+Kniebeugen – 12–15 Wdh.
+Unterarmstütz (Plank) – 20–40 Sek.
+Ausfallschritte – 10 pro Bein
+Rückenübung: Superman oder Rudern an Tischkante – 12–15 Wdh.`,
   },
   {
     id: "joggen",

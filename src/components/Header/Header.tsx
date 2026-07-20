@@ -25,7 +25,7 @@ interface HeaderProps {
   weekLabel: string;
   onPreviousWeek: () => void;
   onNextWeek: () => void;
-  onTodayClick: () => void;
+  onThisWeek: () => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
 }
@@ -36,7 +36,7 @@ export default function Header({
   weekLabel,
   onPreviousWeek,
   onNextWeek,
-  onTodayClick,
+  onThisWeek,
   searchQuery,
   onSearchChange,
 }: HeaderProps) {
@@ -57,7 +57,7 @@ export default function Header({
         }}
         onClose={closeModal}
       />,
-      true
+      true,
     );
   }
 
@@ -71,7 +71,7 @@ export default function Header({
         initialValues={templateToTodoInput(template)}
         onClose={closeModal}
       />,
-      true
+      true,
     );
   }
 
@@ -82,7 +82,9 @@ export default function Header({
       className={`${styles.topbar} ${!isWeekNavOpen ? styles.topbarCollapsed : ""}`}
     >
       <div className={styles.brand}>
-        <span className={styles.brandMark} aria-hidden="true">W</span>
+        <span className={styles.brandMark} aria-hidden="true">
+          W
+        </span>
         <span className={styles.brandTitle}>Weekly Planner</span>
         <span className={styles.brandSub}>KW {weekNumber}</span>
       </div>
@@ -109,12 +111,8 @@ export default function Header({
             <ChevronRightIcon />
           </button>
         </div>
-        <button
-          type="button"
-          className={styles.todayChip}
-          onClick={onTodayClick}
-        >
-          Heute
+        <button type="button" className={styles.todayChip} onClick={onThisWeek}>
+          Aktuelle Woche
         </button>
       </nav>
 
@@ -134,7 +132,11 @@ export default function Header({
           />
         </div>
 
-        <div className={styles.themeToggle} role="group" aria-label="Farbschema">
+        <div
+          className={styles.themeToggle}
+          role="group"
+          aria-label="Farbschema"
+        >
           <button
             type="button"
             className={`${styles.themeButton} ${theme === "light" ? styles.themeButtonActive : ""}`}
@@ -190,7 +192,11 @@ export default function Header({
           type="button"
           className={styles.hamburger}
           onClick={() => setIsWeekNavOpen((open) => !open)}
-          aria-label={isWeekNavOpen ? "Wochennavigation ausblenden" : "Wochennavigation anzeigen"}
+          aria-label={
+            isWeekNavOpen
+              ? "Wochennavigation ausblenden"
+              : "Wochennavigation anzeigen"
+          }
           aria-expanded={isWeekNavOpen}
         >
           <HamburgerIcon />
